@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MapTest {
+class FrontierNavTest {
 
 	private static Stream<Arguments> args() {
 		return Stream.of(
@@ -51,7 +51,7 @@ class MapTest {
 	@ParameterizedTest
 	@MethodSource("args")
 	void check_map_exploitation_for_3_sites_in_line(Site site1, Site site2, Site site3, int expectedMiranium, int expectedRevenue) {
-		Map map = new Map();
+		FrontierNav map = new FrontierNav();
 		map.addSite(site1);
 		map.addSite(site2);
 		map.addSite(site3);

@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 
-public class Map {
+public class FrontierNav {
 	private final SimpleGraph<Site, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
 	public void addSite(Site site) {
