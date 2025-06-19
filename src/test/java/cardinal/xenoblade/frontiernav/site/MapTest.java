@@ -15,17 +15,23 @@ class MapTest {
 
 	private static Stream<Arguments> args() {
 		return Stream.of(
-				Arguments.of(
+				Arguments.of( // All basic
 						new Site(1, MiraniumRank.C, RevenueRank.E, BasicProbe.DEFAULT),
 						new Site(2, MiraniumRank.A, RevenueRank.D, BasicProbe.DEFAULT),
 						new Site(3, MiraniumRank.A, RevenueRank.D, BasicProbe.DEFAULT),
 						625, 600
 				),
-				Arguments.of(
+				Arguments.of( // Mining & Research
 						new Site(1, MiraniumRank.C, RevenueRank.E, MiningProbe.G1),
 						new Site(2, MiraniumRank.A, RevenueRank.D, ResearchProbe.G1),
 						new Site(3, MiraniumRank.A, RevenueRank.D, MiningProbe.G1),
 						900, 1125
+				),
+				Arguments.of( // Mining combo +30%
+						new Site(1, MiraniumRank.C, RevenueRank.E, MiningProbe.G1),
+						new Site(2, MiraniumRank.A, RevenueRank.D, MiningProbe.G1),
+						new Site(3, MiraniumRank.A, RevenueRank.D, MiningProbe.G1),
+						1625, 360
 				)
 		);
 	}
