@@ -10,6 +10,7 @@ import org.jgrapht.graph.SimpleGraph;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Mira {
@@ -21,6 +22,12 @@ public class Mira {
 
 	public Set<Site> getSites() {
 		return graph.vertexSet();
+	}
+
+	public Map<Integer, Site> getSitesByID() {
+		return getSites()
+				.stream()
+				.collect(Collectors.toUnmodifiableMap(Site::id, Function.identity()));
 	}
 
 	public static Builder builder() {

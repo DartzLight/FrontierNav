@@ -1,0 +1,27 @@
+package cardinal.xenoblade.frontiernav.site;
+
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class MiraLoaderTest {
+	@Test
+	void check_mira_load_from_file() throws IOException {
+		// When
+		Mira mira = MiraLoader.loadMira(Path.of("input/simple/sites.tsv"), Path.of("input/simple/network.tsv"));
+
+		// Then
+		Site fn112 = new Site(112, MiraniumRank.A, RevenueRank.F);
+		Site fn114 = new Site(114, MiraniumRank.C, RevenueRank.E);
+		Site fn116 = new Site(116, MiraniumRank.A, RevenueRank.D);
+		Site fn117 = new Site(117, MiraniumRank.A, RevenueRank.D, 1);
+		Mira expected = Mira.builder()
+				.addSite(fn112).addSite(fn114).addSite(fn116).addSite(fn117)
+				.addConnection(fn112, fn114).addConnection(fn114, fn116).addConnection(fn116, fn117)
+				.build();
+		assertThat(mira.getSites()).isEqualTo(expected.getSites());
+	}
+}

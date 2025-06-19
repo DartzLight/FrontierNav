@@ -63,6 +63,15 @@ class FrontierNavTest {
 						),
 						675, 4050, 6000
 				),
+				Arguments.of( // Mining combo + Research unexplored
+						MIRA, Map.of(
+								FN_112, MiningProbe.G1,
+								FN_114, MiningProbe.G1,
+								FN_116, MiningProbe.G1,
+								FN_117, ResearchProbe.G1
+						),
+						1775, 3185, 6000
+				),
 				Arguments.of(  // Storage combo +30%
 						MIRA, Map.of(
 								FN_112, StorageProbe.DEFAULT,
