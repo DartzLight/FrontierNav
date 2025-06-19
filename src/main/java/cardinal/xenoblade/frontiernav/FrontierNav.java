@@ -1,9 +1,6 @@
 package cardinal.xenoblade.frontiernav;
 
-import cardinal.xenoblade.frontiernav.probe.BasicProbe;
-import cardinal.xenoblade.frontiernav.probe.MiningProbe;
-import cardinal.xenoblade.frontiernav.probe.Probe;
-import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
+import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
@@ -11,6 +8,8 @@ import java.util.HashMap;
 import java.util.function.IntSupplier;
 
 public class FrontierNav {
+	private static final int DEFAULT_MIRANIUM_STORAGE = 6000;
+	
 	private final Mira mira;
 	private final HashMap<Site, Probe> probes = new HashMap<>();
 
@@ -38,6 +37,13 @@ public class FrontierNav {
 				.stream()
 				.mapToInt(site -> compute(site, () -> site.getRevenue(getProbe(site)), ResearchProbe.class))
 				.sum();
+	}
+
+	public int getMiraniumStorage() {
+		return mira.getSites()
+				.stream()
+				.mapToInt(site -> compute(site, () -> getProbe(site).getMiraniumStorage(), StorageProbe.class))
+				.sum() + DEFAULT_MIRANIUM_STORAGE;
 	}
 
 	private int compute(Site site, IntSupplier value, Class<? extends Probe> comboProbeType) {

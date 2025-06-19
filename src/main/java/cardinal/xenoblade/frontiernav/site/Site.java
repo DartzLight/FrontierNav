@@ -18,8 +18,8 @@ public record Site(
 	}
 
 	public int getRevenue(Probe probe) {
-		int bonus = probe.bonus() * unexploredTerritories;
+		int bonus = probe.getRevenueBonus() * unexploredTerritories;
 		return revenueRank.getBaseRevenue() * probe.getRevenueMultiplicator() / 100 + bonus;
 	}
-
+	
 }

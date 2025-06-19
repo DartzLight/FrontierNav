@@ -17,6 +17,7 @@ class FrontierNavIntegrationTest {
 		FrontierNav frontierNav = new FrontierNav(mira);
 		assertThat(frontierNav.getMiranium()).isEqualTo(13400);
 		assertThat(frontierNav.getRevenue()).isEqualTo(21475);
+		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(6000);
 	}
 
 }

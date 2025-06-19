@@ -24,12 +24,17 @@ public enum MiningProbe implements Probe {
 	}
 
 	@Override
+	public int getMiraniumStorage() {
+		return 0;
+	}
+
+	@Override
 	public int getRevenueMultiplicator() {
 		return 30;
 	}
 
 	@Override
-	public int bonus() {
+	public int getRevenueBonus() {
 		return 0;
 	}
 }

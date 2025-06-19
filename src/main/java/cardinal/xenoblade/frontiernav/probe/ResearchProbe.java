@@ -22,12 +22,17 @@ public enum ResearchProbe implements Probe {
 	}
 
 	@Override
+	public int getMiraniumStorage() {
+		return 0;
+	}
+
+	@Override
 	public int getRevenueMultiplicator() {
 		return revenueMultiplicator;
 	}
 
 	@Override
-	public int bonus() {
+	public int getRevenueBonus() {
 		return bonus;
 	}
 }

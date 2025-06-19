@@ -4,8 +4,10 @@ public interface Probe {
 
 	int getMiraniumMultiplicator();
 
+	int getMiraniumStorage();
+
 	int getRevenueMultiplicator();
 
-	int bonus();
-	
+	int getRevenueBonus();
+
 }
