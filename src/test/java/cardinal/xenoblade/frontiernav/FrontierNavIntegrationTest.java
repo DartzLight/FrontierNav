@@ -1,5 +1,6 @@
 package cardinal.xenoblade.frontiernav;
 
+import cardinal.xenoblade.frontiernav.probe.BoosterProbe;
 import cardinal.xenoblade.frontiernav.probe.MiningProbe;
 import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
 import cardinal.xenoblade.frontiernav.site.*;
@@ -50,6 +51,21 @@ class FrontierNavIntegrationTest {
 		assertThat(frontierNav.getMiranium()).isEqualTo(38177);
 		assertThat(frontierNav.getRevenue()).isEqualTo(75596);
 		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(39000);
+	}
+
+	@Test
+	void check_booster_probes() throws IOException {
+		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		FrontierNav frontierNav = new FrontierNav(mira);
+		Map<Integer, Site> sitesByID = mira.getSitesByID();
+		frontierNav.addProbe(sitesByID.get(112), BoosterProbe.G2);
+		frontierNav.addProbe(sitesByID.get(114), MiningProbe.G1);
+		frontierNav.addProbe(sitesByID.get(116), BoosterProbe.G1);
+		frontierNav.addProbe(sitesByID.get(117), ResearchProbe.G1);
+		frontierNav.addProbe(sitesByID.get(118), BoosterProbe.G1);
+		assertThat(frontierNav.getMiranium()).isEqualTo(13425);
+		assertThat(frontierNav.getRevenue()).isEqualTo(27335);
+		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(6000);
 	}
 
 }

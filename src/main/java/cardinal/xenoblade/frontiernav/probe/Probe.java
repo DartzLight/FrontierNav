@@ -10,4 +10,6 @@ public interface Probe {
 
 	int getRevenueBonus();
 
+	int getBoostMultiplier();
+
 }

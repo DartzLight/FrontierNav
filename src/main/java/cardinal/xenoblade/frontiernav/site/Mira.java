@@ -3,6 +3,7 @@ package cardinal.xenoblade.frontiernav.site;
 import cardinal.xenoblade.frontiernav.probe.BasicProbe;
 import cardinal.xenoblade.frontiernav.probe.Probe;
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -48,6 +49,10 @@ public class Mira {
 
 		ConnectivityInspector<Site, DefaultEdge> connectivity = new ConnectivityInspector<>(subgraph);
 		return connectivity.connectedSetOf(site).size();
+	}
+
+	public Set<Site> getConnectedSites(Site site) {
+		return Graphs.neighborSetOf(graph, site);
 	}
 
 	public static class Builder {

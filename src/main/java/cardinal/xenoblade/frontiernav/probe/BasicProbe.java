@@ -22,4 +22,9 @@ public enum BasicProbe implements Probe {
 	public int getRevenueBonus() {
 		return 0;
 	}
+
+	@Override
+	public int getBoostMultiplier() {
+		return 100;
+	}
 }

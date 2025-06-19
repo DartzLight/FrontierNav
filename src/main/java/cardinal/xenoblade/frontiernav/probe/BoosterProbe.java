@@ -1,7 +1,14 @@
 package cardinal.xenoblade.frontiernav.probe;
 
-public enum StorageProbe implements Probe {
-	DEFAULT;
+public enum BoosterProbe implements Probe {
+	G1(150),
+	G2(200);
+
+	private final int boostMultiplier;
+
+	BoosterProbe(int boostMultiplier) {
+		this.boostMultiplier = boostMultiplier;
+	}
 
 	@Override
 	public int getMiraniumMultiplicator() {
@@ -10,7 +17,7 @@ public enum StorageProbe implements Probe {
 
 	@Override
 	public int getMiraniumStorage() {
-		return 3000;
+		return 0;
 	}
 
 	@Override
@@ -25,7 +32,6 @@ public enum StorageProbe implements Probe {
 
 	@Override
 	public int getBoostMultiplier() {
-		return 100;
+		return boostMultiplier;
 	}
-
 }

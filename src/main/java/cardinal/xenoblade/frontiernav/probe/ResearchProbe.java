@@ -35,4 +35,9 @@ public enum ResearchProbe implements Probe {
 	public int getRevenueBonus() {
 		return bonus;
 	}
+
+	@Override
+	public int getBoostMultiplier() {
+		return 100;
+	}
 }
