@@ -32,6 +32,18 @@ class MapTest {
 						new Site(2, MiraniumRank.A, RevenueRank.D, MiningProbe.G1),
 						new Site(3, MiraniumRank.A, RevenueRank.D, MiningProbe.G1),
 						1625, 360
+				),
+				Arguments.of( // Unexplored with research
+						new Site(1, MiraniumRank.C, RevenueRank.E, BasicProbe.DEFAULT),
+						new Site(2, MiraniumRank.A, RevenueRank.D, BasicProbe.DEFAULT),
+						new Site(3, MiraniumRank.A, RevenueRank.D, 1, ResearchProbe.G1),
+						525, 3275
+				),
+				Arguments.of( // Unexplored without research
+						new Site(1, MiraniumRank.C, RevenueRank.E, BasicProbe.DEFAULT),
+						new Site(2, MiraniumRank.A, RevenueRank.D, BasicProbe.DEFAULT),
+						new Site(3, MiraniumRank.A, RevenueRank.D, 1, MiningProbe.G1),
+						875, 510
 				)
 		);
 	}

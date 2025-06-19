@@ -27,4 +27,9 @@ public enum MiningProbe implements Probe {
 	public int getRevenueMultiplicator() {
 		return 30;
 	}
+
+	@Override
+	public int bonus() {
+		return 0;
+	}
 }

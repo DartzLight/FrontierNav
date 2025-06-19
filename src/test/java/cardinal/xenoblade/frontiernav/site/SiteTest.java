@@ -17,7 +17,11 @@ class SiteTest {
 		return Stream.of(
 				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, BasicProbe.DEFAULT), 250, 225),
 				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, MiningProbe.G1), 500, 135),
-				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, ResearchProbe.G1), 150, 900)
+				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, ResearchProbe.G1), 150, 900),
+				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, 1, BasicProbe.DEFAULT), 250, 225),
+				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, 1, MiningProbe.G1), 500, 135),
+				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, 1, ResearchProbe.G1), 150, 2900),
+				Arguments.of(new Site(1, MiraniumRank.A, RevenueRank.D, 2, ResearchProbe.G1), 150, 4900)
 		);
 	}
 

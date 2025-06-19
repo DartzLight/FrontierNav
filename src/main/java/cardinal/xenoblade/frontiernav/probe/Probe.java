@@ -6,4 +6,6 @@ public interface Probe {
 
 	int getRevenueMultiplicator();
 
+	int bonus();
+	
 }

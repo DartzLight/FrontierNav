@@ -1,17 +1,19 @@
 package cardinal.xenoblade.frontiernav.probe;
 
 public enum ResearchProbe implements Probe {
-	G1(200),
-	G2(250),
-	G3(300),
-	G4(350),
-	G5(400),
-	G6(450);
+	G1(200, 2000),
+	G2(250, 2500),
+	G3(300, 3000),
+	G4(350, 3500),
+	G5(400, 4000),
+	G6(450, 4500);
 
 	private final int revenueMultiplicator;
+	private final int bonus;
 
-	ResearchProbe(int revenueMultiplicator) {
+	ResearchProbe(int revenueMultiplicator, int bonus) {
 		this.revenueMultiplicator = revenueMultiplicator;
+		this.bonus = bonus;
 	}
 
 	@Override
@@ -22,5 +24,10 @@ public enum ResearchProbe implements Probe {
 	@Override
 	public int getRevenueMultiplicator() {
 		return revenueMultiplicator;
+	}
+
+	@Override
+	public int bonus() {
+		return bonus;
 	}
 }

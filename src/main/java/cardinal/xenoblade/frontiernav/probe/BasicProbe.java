@@ -12,4 +12,9 @@ public enum BasicProbe implements Probe {
 	public int getRevenueMultiplicator() {
 		return 50;
 	}
+
+	@Override
+	public int bonus() {
+		return 0;
+	}
 }
