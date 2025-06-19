@@ -30,7 +30,7 @@ public class MiraLoader {
 							cells[0].transform(Integer::parseInt),
 							MiraniumRank.of(cells[1]),
 							RevenueRank.of(cells[2]),
-							parseUnexploredTerritories(cells[3])
+							cells[3].transform(MiraLoader::parseUnexploredTerritories)
 					))
 					.collect(Collectors.toUnmodifiableMap(Site::id, Function.identity()));
 		}
