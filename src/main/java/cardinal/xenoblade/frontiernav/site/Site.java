@@ -1,5 +1,6 @@
 package cardinal.xenoblade.frontiernav.site;
 
+import cardinal.xenoblade.frontiernav.probe.BasicProbe;
 import cardinal.xenoblade.frontiernav.probe.Probe;
 
 public record Site(
@@ -9,6 +10,14 @@ public record Site(
 		int unexploredTerritories,
 		Probe probe
 ) {
+
+	public Site(int id, MiraniumRank miraniumRank, RevenueRank revenueRank) {
+		this(id, miraniumRank, revenueRank, 0, BasicProbe.DEFAULT);
+	}
+
+	public Site(int id, MiraniumRank miraniumRank, RevenueRank revenueRank, int unexploredTerritories) {
+		this(id, miraniumRank, revenueRank, unexploredTerritories, BasicProbe.DEFAULT);
+	}
 
 	public Site(int id, MiraniumRank miraniumRank, RevenueRank revenueRank, Probe probe) {
 		this(id, miraniumRank, revenueRank, 0, probe);

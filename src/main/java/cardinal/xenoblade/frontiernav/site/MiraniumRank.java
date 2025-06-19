@@ -1,5 +1,7 @@
 package cardinal.xenoblade.frontiernav.site;
 
+import java.util.Arrays;
+
 public enum MiraniumRank {
 	A(500),
 	B(350),
@@ -9,6 +11,13 @@ public enum MiraniumRank {
 
 	MiraniumRank(int baseMiranium) {
 		this.baseMiranium = baseMiranium;
+	}
+
+	public static MiraniumRank of(String string) {
+		return Arrays.stream(values())
+				.filter(value -> value.name().equals(string))
+				.findFirst()
+				.orElseThrow();
 	}
 
 	public int getBaseMiranium() {
