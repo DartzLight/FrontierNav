@@ -8,19 +8,19 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class FrontierNavLoader {
-	private FrontierNavLoader() {
+public class MiraLoader {
+	private MiraLoader() {
 	}
 
 	private record SiteConnection(Site site1, Site site2) {}
 
-	public static FrontierNav loadMap(Path sitesPath, Path networkPath) throws IOException {
+	public static Mira loadMira(Path sitesPath, Path networkPath) throws IOException {
 		Map<Integer, Site> sites = loadSites(sitesPath);
 		List<SiteConnection> connections = loadNetwork(networkPath, sites);
-		FrontierNav map = new FrontierNav();
-		sites.values().forEach(map::addSite);
-		connections.forEach(connection -> map.addConnection(connection.site1, connection.site2));
-		return map;
+		Mira.Builder builder = Mira.builder();
+		sites.values().forEach(builder::addSite);
+		connections.forEach(connection -> builder.addConnection(connection.site1, connection.site2));
+		return builder.build();
 	}
 
 	private static Map<Integer, Site> loadSites(Path sitesPath) throws IOException {
