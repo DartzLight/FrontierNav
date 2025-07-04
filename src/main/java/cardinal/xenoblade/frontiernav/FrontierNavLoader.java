@@ -1,9 +1,6 @@
 package cardinal.xenoblade.frontiernav;
 
-import cardinal.xenoblade.frontiernav.probe.MiningProbe;
-import cardinal.xenoblade.frontiernav.probe.Probe;
-import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
-import cardinal.xenoblade.frontiernav.probe.StorageProbe;
+import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
@@ -56,6 +53,9 @@ public class FrontierNavLoader {
 			case "R5" -> ResearchProbe.G5;
 			case "R6" -> ResearchProbe.G6;
 			case "S" -> StorageProbe.DEFAULT;
+			case "B1" -> BoosterProbe.G1;
+			case "B2" -> BoosterProbe.G2;
+			case "D" -> DuplicatorProbe.DEFAULT;
 			default -> throw new UncheckedIOException(new IOException("Unsupported probe: " + string));
 		};
 	}
