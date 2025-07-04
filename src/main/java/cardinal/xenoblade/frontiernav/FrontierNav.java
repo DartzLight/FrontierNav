@@ -6,9 +6,9 @@ import cardinal.xenoblade.frontiernav.site.Site;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
-import java.util.function.IntSupplier;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public class FrontierNav {
 	private static final int DEFAULT_MIRANIUM_STORAGE = 6000;
@@ -31,37 +31,98 @@ public class FrontierNav {
 	public int getMiranium() {
 		return mira.getSites()
 				.stream()
-				.mapToInt(site -> compute(site, () -> site.getMiranium(getProbe(site)), MiningProbe.class))
+				.mapToInt(this::computeMiranium)
 				.sum();
 	}
 
 	public int getRevenue() {
 		return mira.getSites()
 				.stream()
-				.mapToInt(site -> compute(site, () -> site.getRevenue(getProbe(site)), ResearchProbe.class))
+				.mapToInt(this::computeRevenue)
 				.sum();
 	}
 
-	public int getMiraniumStorage() {
+	public int getStorage() {
 		return mira.getSites()
 				.stream()
-				.mapToInt(site -> compute(site, () -> getProbe(site).getMiraniumStorage(), StorageProbe.class))
+				.mapToInt(this::computeStorage)
 				.sum() + DEFAULT_MIRANIUM_STORAGE;
 	}
 
-	private int compute(Site site, IntSupplier baseValue, Class<? extends Probe> probeType) {
-		int chainMultiplier = computeChainMultiplier(site, probeType);
-		int valueAfterChain = baseValue.getAsInt() * chainMultiplier / 100;
-		List<Integer> boostMultipliers = computeBonusMultiplier(site, probeType);
-		int valueAfterBoost = valueAfterChain;
-		for (int boostMultiplier : boostMultipliers) {
-			valueAfterBoost = valueAfterBoost * boostMultiplier / 100;
+	private int computeMiranium(Site site) {
+		int siteValue = site.miraniumRank().getBaseMiranium();
+		Probe probe = getProbe(site);
+		if (probe instanceof DuplicatorProbe) {
+			Set<Site> connectedSites = mira.getConnectedSites(site);
+			return computeDuplicator(connectedSites, __ -> siteValue, FrontierNav::getMiraniumMultiplier, MiningProbe.class);
 		}
-		return valueAfterBoost;
+		int siteMultiplier = getMiraniumMultiplier(probe);
+		int boostMultipliers = computeBoostMultiplier(site, MiningProbe.class);
+		int chainMultiplier = computeChainMultiplier(site, MiningProbe.class);
+		return applyMultipliers(siteValue, siteMultiplier, chainMultiplier, boostMultipliers);
 	}
 
-	private int computeChainMultiplier(Site site, Class<? extends Probe> siteProbeType) {
-		if (siteProbeType.isInstance(getProbe(site))) {
+	private static int getMiraniumMultiplier(Probe probe) {
+		return probe.getMiraniumMultiplier();
+	}
+
+	private int computeRevenue(Site site) {
+		int siteValue = site.revenueRank().getBaseRevenue();
+		Probe probe = getProbe(site);
+		if (probe instanceof DuplicatorProbe) {
+			Set<Site> connectedSites = mira.getConnectedSites(site);
+			return computeDuplicator(connectedSites, __ -> siteValue, FrontierNav::getRevenueMultiplier, ResearchProbe.class)
+					+ computeDuplicator(connectedSites, connected -> getRevenueBonus(getProbe(connected), site), __ -> 100, ResearchProbe.class);
+		}
+		int siteMultiplier = getRevenueMultiplier(probe);
+		int boostMultipliers = computeBoostMultiplier(site, ResearchProbe.class);
+		int chainMultiplier = computeChainMultiplier(site, ResearchProbe.class);
+		int bonus = getRevenueBonus(probe, site);
+		return applyMultipliers(siteValue, siteMultiplier, chainMultiplier, boostMultipliers)
+				+ applyMultipliers(bonus, chainMultiplier, boostMultipliers);
+	}
+
+	private static int getRevenueMultiplier(Probe probe) {
+		return probe.getRevenueMultiplier();
+	}
+
+	private static int getRevenueBonus(Probe probe, Site site) {
+		return probe.getRevenueBonus() * site.unexploredTerritories();
+	}
+
+	private int computeStorage(Site site) {
+		Probe probe = getProbe(site);
+		if (probe instanceof DuplicatorProbe) {
+			Set<Site> connectedSites = mira.getConnectedSites(site);
+			return computeDuplicator(connectedSites, connected -> getMiraniumStorage(getProbe(connected)), __ -> 100, StorageProbe.class);
+		}
+		int siteValue = getMiraniumStorage(probe);
+		int boostMultipliers = computeBoostMultiplier(site, StorageProbe.class);
+		int chainMultiplier = computeChainMultiplier(site, StorageProbe.class);
+		return applyMultipliers(siteValue, chainMultiplier, boostMultipliers);
+	}
+
+	private static int getMiraniumStorage(Probe probe) {
+		return probe.getMiraniumStorage();
+	}
+
+	private int computeDuplicator(Set<Site> connectedSites, Function<Site, Integer> valueRetriever, Function<Probe, Integer> siteMultiplierRetriever, Class<? extends Probe> multipliableProbeType) {
+		int total = 0;
+		for (Site connected : connectedSites) {
+			Probe probe = getProbe(connected);
+			if (!(probe instanceof DuplicatorProbe)) {
+				int value = valueRetriever.apply(connected);
+				int siteMultiplier = siteMultiplierRetriever.apply(probe);
+				int boostMultiplier = computeBoostMultiplier(connected, multipliableProbeType);
+				int chainMultiplier = computeChainMultiplier(connected, multipliableProbeType);
+				total += applyMultipliers(value, siteMultiplier, boostMultiplier, chainMultiplier);
+			}
+		}
+		return total;
+	}
+
+	private int computeChainMultiplier(Site site, Class<? extends Probe> multipliableProbeType) {
+		if (canHaveMultiplier(site, multipliableProbeType)) {
 			int chain = mira.computeChain(site, Collections.unmodifiableMap(probes));
 			return getChainMultiplier(chain);
 		}
@@ -81,16 +142,43 @@ public class FrontierNav {
 		return 100;
 	}
 
-	private List<Integer> computeBonusMultiplier(Site site, Class<? extends Probe> siteProbeType) {
-		if (siteProbeType.isInstance(getProbe(site))) {
+	private int computeBoostMultiplier(Site site, Class<? extends Probe> multipliableProbeType) {
+		if (canHaveMultiplier(site, multipliableProbeType)) {
 			Set<Site> connectedSites = mira.getConnectedSites(site);
 			return connectedSites.stream()
-					.map(this::getProbe)
-					.filter(BoosterProbe.class::isInstance)
-					.map(Probe::getBoostMultiplier)
-					.toList();
+					.mapToInt(this::computeBoostMultiplier)
+					.reduce(100, (a, b) -> a * b / 100);
 		}
-		return List.of();
+		return 100;
+	}
+
+	private int computeBoostMultiplier(Site site) {
+		Probe probe = getProbe(site);
+		if (probe instanceof DuplicatorProbe) {
+			Set<Site> connectedSites = mira.getConnectedSites(site);
+			return connectedSites.stream()
+					.filter(connected -> !(getProbe(connected) instanceof DuplicatorProbe))
+					.mapToInt(this::computeBoostMultiplier)
+					.map(x -> x - 100)
+					.sum() + 100;
+		}
+		return probe.getBoostMultiplier();
+	}
+
+	private boolean canHaveMultiplier(Site site, Class<? extends Probe> multipliableProbeType) {
+		Probe probe = getProbe(site);
+		if (probe instanceof DuplicatorProbe) {
+			Set<Site> connectedSites = mira.getConnectedSites(site);
+			return connectedSites.stream()
+					.filter(connected -> !(getProbe(connected) instanceof DuplicatorProbe))
+					.anyMatch(connected -> canHaveMultiplier(connected, multipliableProbeType));
+		}
+		return multipliableProbeType.isInstance(probe);
+	}
+
+	private static int applyMultipliers(int siteValue, int... multipliers) {
+		return IntStream.of(multipliers)
+				.reduce(siteValue, (a, b) -> a * b / 100);
 	}
 
 }

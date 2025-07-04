@@ -2,11 +2,11 @@ package cardinal.xenoblade.frontiernav.probe;
 
 public interface Probe {
 
-	int getMiraniumMultiplicator();
+	int getMiraniumMultiplier();
 
 	int getMiraniumStorage();
 
-	int getRevenueMultiplicator();
+	int getRevenueMultiplier();
 
 	int getRevenueBonus();
 

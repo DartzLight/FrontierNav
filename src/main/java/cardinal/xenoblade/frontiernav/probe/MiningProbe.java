@@ -12,15 +12,15 @@ public enum MiningProbe implements Probe {
 	G9(270),
 	G10(300);
 
-	private final int miraniumMultiplicator;
+	private final int miraniumMultiplier;
 
-	MiningProbe(int miraniumMultiplicator) {
-		this.miraniumMultiplicator = miraniumMultiplicator;
+	MiningProbe(int miraniumMultiplier) {
+		this.miraniumMultiplier = miraniumMultiplier;
 	}
 
 	@Override
-	public int getMiraniumMultiplicator() {
-		return miraniumMultiplicator;
+	public int getMiraniumMultiplier() {
+		return miraniumMultiplier;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public enum MiningProbe implements Probe {
 	}
 
 	@Override
-	public int getRevenueMultiplicator() {
+	public int getRevenueMultiplier() {
 		return 30;
 	}
 

@@ -1,8 +1,6 @@
 package cardinal.xenoblade.frontiernav;
 
-import cardinal.xenoblade.frontiernav.probe.BoosterProbe;
-import cardinal.xenoblade.frontiernav.probe.MiningProbe;
-import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
+import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.site.*;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +30,7 @@ class FrontierNavIntegrationTest {
 		frontierNav.addProbe(sitesByID.get(117), ResearchProbe.G1);
 		assertThat(frontierNav.getMiranium()).isEqualTo(1775);
 		assertThat(frontierNav.getRevenue()).isEqualTo(3185);
-		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(6000);
+		assertThat(frontierNav.getStorage()).isEqualTo(6000);
 	}
 
 	@Test
@@ -41,7 +39,7 @@ class FrontierNavIntegrationTest {
 		FrontierNav frontierNav = new FrontierNav(mira);
 		assertThat(frontierNav.getMiranium()).isEqualTo(13400);
 		assertThat(frontierNav.getRevenue()).isEqualTo(21475);
-		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(6000);
+		assertThat(frontierNav.getStorage()).isEqualTo(6000);
 	}
 
 	@Test
@@ -50,7 +48,7 @@ class FrontierNavIntegrationTest {
 		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, Path.of("input/probes.tsv"));
 		assertThat(frontierNav.getMiranium()).isEqualTo(38177);
 		assertThat(frontierNav.getRevenue()).isEqualTo(75596);
-		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(39000);
+		assertThat(frontierNav.getStorage()).isEqualTo(39000);
 	}
 
 	@Test
@@ -65,7 +63,51 @@ class FrontierNavIntegrationTest {
 		frontierNav.addProbe(sitesByID.get(118), BoosterProbe.G1);
 		assertThat(frontierNav.getMiranium()).isEqualTo(13425);
 		assertThat(frontierNav.getRevenue()).isEqualTo(27335);
-		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(6000);
+		assertThat(frontierNav.getStorage()).isEqualTo(6000);
+	}
+
+	@Test
+	void check_duplicator_probes() throws IOException {
+		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		FrontierNav frontierNav = new FrontierNav(mira);
+		Map<Integer, Site> sitesByID = mira.getSitesByID();
+		frontierNav.addProbe(sitesByID.get(204), DuplicatorProbe.DEFAULT);
+		frontierNav.addProbe(sitesByID.get(203), ResearchProbe.G6);
+		frontierNav.addProbe(sitesByID.get(205), MiningProbe.G10);
+		frontierNav.addProbe(sitesByID.get(211), StorageProbe.DEFAULT);
+		assertThat(frontierNav.getMiranium()).isEqualTo(16100);
+		assertThat(frontierNav.getRevenue()).isEqualTo(26950);
+		assertThat(frontierNav.getStorage()).isEqualTo(12000);
+	}
+
+	@Test
+	void check_duplicator_booster_probes() throws IOException {
+		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		FrontierNav frontierNav = new FrontierNav(mira);
+		Map<Integer, Site> sitesByID = mira.getSitesByID();
+		frontierNav.addProbe(sitesByID.get(204), DuplicatorProbe.DEFAULT);
+		frontierNav.addProbe(sitesByID.get(203), ResearchProbe.G6);
+		frontierNav.addProbe(sitesByID.get(205), MiningProbe.G10);
+		frontierNav.addProbe(sitesByID.get(211), StorageProbe.DEFAULT);
+		frontierNav.addProbe(sitesByID.get(212), BoosterProbe.G1);
+		assertThat(frontierNav.getMiranium()).isEqualTo(17260);
+		assertThat(frontierNav.getRevenue()).isEqualTo(29534);
+		assertThat(frontierNav.getStorage()).isEqualTo(15000);
+	}
+
+	@Test
+	void check_multiple_duplicator_booster_probes() throws IOException {
+		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		FrontierNav frontierNav = new FrontierNav(mira);
+		Map<Integer, Site> sitesByID = mira.getSitesByID();
+		frontierNav.addProbe(sitesByID.get(204), DuplicatorProbe.DEFAULT);
+		frontierNav.addProbe(sitesByID.get(203), ResearchProbe.G6);
+		frontierNav.addProbe(sitesByID.get(205), MiningProbe.G10);
+		frontierNav.addProbe(sitesByID.get(211), DuplicatorProbe.DEFAULT);
+		frontierNav.addProbe(sitesByID.get(212), BoosterProbe.G1);
+		assertThat(frontierNav.getMiranium()).isEqualTo(17410);
+		assertThat(frontierNav.getRevenue()).isEqualTo(29659);
+		assertThat(frontierNav.getStorage()).isEqualTo(6000);
 	}
 
 }

@@ -39,6 +39,6 @@ class FrontierNavLoaderTest {
 		expected.addProbe(sitesByID.get(117), ResearchProbe.G1);
 		assertThat(frontierNav.getMiranium()).isEqualTo(expected.getMiranium());
 		assertThat(frontierNav.getRevenue()).isEqualTo(expected.getRevenue());
-		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(expected.getMiraniumStorage());
+		assertThat(frontierNav.getStorage()).isEqualTo(expected.getStorage());
 	}
 }

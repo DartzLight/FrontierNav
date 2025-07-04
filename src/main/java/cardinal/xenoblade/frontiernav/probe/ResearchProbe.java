@@ -8,16 +8,16 @@ public enum ResearchProbe implements Probe {
 	G5(400, 4000),
 	G6(450, 4500);
 
-	private final int revenueMultiplicator;
+	private final int revenueMultiplier;
 	private final int bonus;
 
-	ResearchProbe(int revenueMultiplicator, int bonus) {
-		this.revenueMultiplicator = revenueMultiplicator;
+	ResearchProbe(int revenueMultiplier, int bonus) {
+		this.revenueMultiplier = revenueMultiplier;
 		this.bonus = bonus;
 	}
 
 	@Override
-	public int getMiraniumMultiplicator() {
+	public int getMiraniumMultiplier() {
 		return 30;
 	}
 
@@ -27,8 +27,8 @@ public enum ResearchProbe implements Probe {
 	}
 
 	@Override
-	public int getRevenueMultiplicator() {
-		return revenueMultiplicator;
+	public int getRevenueMultiplier() {
+		return revenueMultiplier;
 	}
 
 	@Override

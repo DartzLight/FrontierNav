@@ -4,7 +4,7 @@ public enum BasicProbe implements Probe {
 	DEFAULT;
 
 	@Override
-	public int getMiraniumMultiplicator() {
+	public int getMiraniumMultiplier() {
 		return 50;
 	}
 
@@ -14,7 +14,7 @@ public enum BasicProbe implements Probe {
 	}
 
 	@Override
-	public int getRevenueMultiplicator() {
+	public int getRevenueMultiplier() {
 		return 50;
 	}
 

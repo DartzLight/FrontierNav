@@ -29,8 +29,17 @@ class SiteTest {
 	@ParameterizedTest
 	@MethodSource("args")
 	void check_site_exploitation(Site site, Probe probe, int expectedMiranium, int expectedRevenue) {
-		assertThat(site.getMiranium(probe)).isEqualTo(expectedMiranium);
-		assertThat(site.getRevenue(probe)).isEqualTo(expectedRevenue);
+		assertThat(computeLocalSiteMiranium(site, probe)).isEqualTo(expectedMiranium);
+		assertThat(computeLocalSiteRevenue(site, probe)).isEqualTo(expectedRevenue);
+	}
+
+	private static int computeLocalSiteMiranium(Site site, Probe probe) {
+		return site.miraniumRank().getBaseMiranium() * probe.getMiraniumMultiplier() / 100;
+	}
+
+	private static int computeLocalSiteRevenue(Site site, Probe probe) {
+		int bonus = probe.getRevenueBonus() * site.unexploredTerritories();
+		return site.revenueRank().getBaseRevenue() * probe.getRevenueMultiplier() / 100 + bonus;
 	}
 
 }

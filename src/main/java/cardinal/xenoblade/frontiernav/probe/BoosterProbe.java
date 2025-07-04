@@ -11,7 +11,7 @@ public enum BoosterProbe implements Probe {
 	}
 
 	@Override
-	public int getMiraniumMultiplicator() {
+	public int getMiraniumMultiplier() {
 		return 10;
 	}
 
@@ -21,7 +21,7 @@ public enum BoosterProbe implements Probe {
 	}
 
 	@Override
-	public int getRevenueMultiplicator() {
+	public int getRevenueMultiplier() {
 		return 10;
 	}
 

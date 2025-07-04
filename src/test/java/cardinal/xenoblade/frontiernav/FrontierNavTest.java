@@ -91,7 +91,7 @@ class FrontierNavTest {
 		probes.forEach(frontierNav::addProbe);
 		assertThat(frontierNav.getMiranium()).isEqualTo(expectedMiranium);
 		assertThat(frontierNav.getRevenue()).isEqualTo(expectedRevenue);
-		assertThat(frontierNav.getMiraniumStorage()).isEqualTo(expectedStorage);
+		assertThat(frontierNav.getStorage()).isEqualTo(expectedStorage);
 	}
 
 }
