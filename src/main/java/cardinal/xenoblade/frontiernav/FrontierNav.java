@@ -6,6 +6,7 @@ import cardinal.xenoblade.frontiernav.site.Site;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -14,7 +15,11 @@ public class FrontierNav {
 	private static final int DEFAULT_MIRANIUM_STORAGE = 6000;
 
 	private final Mira mira;
-	private final HashMap<Site, Probe> probes = new HashMap<>();
+	private final Map<Site, Probe> probes = new HashMap<>();
+
+	public Mira getMira() {
+		return mira;
+	}
 
 	public FrontierNav(Mira mira) {
 		this.mira = mira;
@@ -26,6 +31,10 @@ public class FrontierNav {
 
 	private Probe getProbe(Site site) {
 		return probes.getOrDefault(site, BasicProbe.DEFAULT);
+	}
+
+	public Map<Site, Probe> getProbes() {
+		return Map.copyOf(probes);
 	}
 
 	public int getMiranium() {
