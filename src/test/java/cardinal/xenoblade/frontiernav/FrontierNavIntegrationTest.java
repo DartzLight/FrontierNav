@@ -47,7 +47,7 @@ class FrontierNavIntegrationTest {
 		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
 		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, Path.of("input/probes.tsv"));
 		assertThat(frontierNav.getMiranium()).isEqualTo(39915);
-		assertThat(frontierNav.getRevenue()).isEqualTo(109455);
+		assertThat(frontierNav.getRevenue()).isEqualTo(109453);
 		assertThat(frontierNav.getStorage()).isEqualTo(39000);
 	}
 
