@@ -37,8 +37,8 @@ class FrontierNavIntegrationTest {
 	void check_all_basic_probes() throws IOException {
 		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
 		FrontierNav frontierNav = new FrontierNav(mira);
-		assertThat(frontierNav.getMiranium()).isEqualTo(13400);
-		assertThat(frontierNav.getRevenue()).isEqualTo(21475);
+		assertThat(frontierNav.getMiranium()).isEqualTo(16550);
+		assertThat(frontierNav.getRevenue()).isEqualTo(27675);
 		assertThat(frontierNav.getStorage()).isEqualTo(6000);
 	}
 
@@ -46,9 +46,9 @@ class FrontierNavIntegrationTest {
 	void check_all_custom_probes() throws IOException {
 		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
 		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, Path.of("input/probes.tsv"));
-		assertThat(frontierNav.getMiranium()).isEqualTo(39915);
-		assertThat(frontierNav.getRevenue()).isEqualTo(109453);
-		assertThat(frontierNav.getStorage()).isEqualTo(39000);
+		assertThat(frontierNav.getMiranium()).isEqualTo(61166);
+		assertThat(frontierNav.getRevenue()).isEqualTo(213025);
+		assertThat(frontierNav.getStorage()).isEqualTo(72300);
 	}
 
 	@Test
@@ -61,8 +61,8 @@ class FrontierNavIntegrationTest {
 		frontierNav.addProbe(sitesByID.get(116), BoosterProbe.G1);
 		frontierNav.addProbe(sitesByID.get(117), ResearchProbe.G1);
 		frontierNav.addProbe(sitesByID.get(118), BoosterProbe.G1);
-		assertThat(frontierNav.getMiranium()).isEqualTo(13425);
-		assertThat(frontierNav.getRevenue()).isEqualTo(27335);
+		assertThat(frontierNav.getMiranium()).isEqualTo(16575);
+		assertThat(frontierNav.getRevenue()).isEqualTo(33535);
 		assertThat(frontierNav.getStorage()).isEqualTo(6000);
 	}
 
@@ -75,8 +75,8 @@ class FrontierNavIntegrationTest {
 		frontierNav.addProbe(sitesByID.get(203), ResearchProbe.G6);
 		frontierNav.addProbe(sitesByID.get(205), MiningProbe.G10);
 		frontierNav.addProbe(sitesByID.get(211), StorageProbe.DEFAULT);
-		assertThat(frontierNav.getMiranium()).isEqualTo(16100);
-		assertThat(frontierNav.getRevenue()).isEqualTo(26950);
+		assertThat(frontierNav.getMiranium()).isEqualTo(19250);
+		assertThat(frontierNav.getRevenue()).isEqualTo(33150);
 		assertThat(frontierNav.getStorage()).isEqualTo(12000);
 	}
 
@@ -90,8 +90,8 @@ class FrontierNavIntegrationTest {
 		frontierNav.addProbe(sitesByID.get(205), MiningProbe.G10);
 		frontierNav.addProbe(sitesByID.get(211), StorageProbe.DEFAULT);
 		frontierNav.addProbe(sitesByID.get(212), BoosterProbe.G1);
-		assertThat(frontierNav.getMiranium()).isEqualTo(17260);
-		assertThat(frontierNav.getRevenue()).isEqualTo(29534);
+		assertThat(frontierNav.getMiranium()).isEqualTo(20410);
+		assertThat(frontierNav.getRevenue()).isEqualTo(35734);
 		assertThat(frontierNav.getStorage()).isEqualTo(15000);
 	}
 
@@ -105,8 +105,8 @@ class FrontierNavIntegrationTest {
 		frontierNav.addProbe(sitesByID.get(205), MiningProbe.G10);
 		frontierNav.addProbe(sitesByID.get(211), DuplicatorProbe.DEFAULT);
 		frontierNav.addProbe(sitesByID.get(212), BoosterProbe.G1);
-		assertThat(frontierNav.getMiranium()).isEqualTo(17410);
-		assertThat(frontierNav.getRevenue()).isEqualTo(29659);
+		assertThat(frontierNav.getMiranium()).isEqualTo(20560);
+		assertThat(frontierNav.getRevenue()).isEqualTo(35859);
 		assertThat(frontierNav.getStorage()).isEqualTo(6000);
 	}
 
