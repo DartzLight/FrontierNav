@@ -78,8 +78,14 @@ public class FrontierNavExporter {
 						IntStream.rangeClosed(401, 420),
 						IntStream.rangeClosed(501, 516))
 				.flatMapToInt(Function.identity())
-				.filter(siteID -> !sites.contains(siteID))
-				.forEach(siteID -> export.put(siteID, 0));
+				.filter(siteID -> !export.containsKey(siteID))
+				.forEach(siteID -> {
+					if (sites.contains(siteID)) {
+						export.put(siteID, 1);
+					} else {
+						export.put(siteID, 0);
+					}
+				});
 	}
 
 	public static void main(String[] args) throws IOException {
