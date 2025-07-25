@@ -56,6 +56,7 @@ public class FrontierNavLoader {
 			case "B1" -> BoosterProbe.G1;
 			case "B2" -> BoosterProbe.G2;
 			case "D" -> DuplicatorProbe.DEFAULT;
+			case "-" -> BasicProbe.DEFAULT;
 			default -> throw new UncheckedIOException(new IOException("Unsupported probe: " + string));
 		};
 	}

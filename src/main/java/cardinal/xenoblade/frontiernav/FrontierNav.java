@@ -26,6 +26,9 @@ public class FrontierNav {
 	}
 
 	public void addProbe(Site site, Probe probe) {
+		if (probe instanceof BasicProbe) {
+			return;
+		}
 		probes.put(site, probe);
 	}
 

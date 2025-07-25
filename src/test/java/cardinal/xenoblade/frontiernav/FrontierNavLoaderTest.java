@@ -9,12 +9,12 @@ import cardinal.xenoblade.frontiernav.site.Site;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FrontierNavLoaderTest {
+
 	@Test
 	void check_frontier_nav_load_from_file() throws IOException {
 		// Given
@@ -28,7 +28,7 @@ class FrontierNavLoaderTest {
 				.build();
 
 		// When
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, Path.of("input/simple/probes.tsv"));
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, ResourceHelper.getResourcePath("simple/probes.tsv"));
 
 		// Then
 		FrontierNav expected = new FrontierNav(mira);

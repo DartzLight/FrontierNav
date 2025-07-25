@@ -5,7 +5,6 @@ import cardinal.xenoblade.frontiernav.site.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,7 +34,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_all_basic_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
 		FrontierNav frontierNav = new FrontierNav(mira);
 		assertThat(frontierNav.getMiranium()).isEqualTo(16550);
 		assertThat(frontierNav.getRevenue()).isEqualTo(27675);
@@ -44,8 +43,8 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_all_custom_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, Path.of("input/probes.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, ResourceHelper.getResourcePath("complete/probes.tsv"));
 		assertThat(frontierNav.getMiranium()).isEqualTo(61166);
 		assertThat(frontierNav.getRevenue()).isEqualTo(213025);
 		assertThat(frontierNav.getStorage()).isEqualTo(72300);
@@ -53,7 +52,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_booster_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
 		FrontierNav frontierNav = new FrontierNav(mira);
 		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		frontierNav.addProbe(sitesByID.get(112), BoosterProbe.G2);
@@ -68,7 +67,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_duplicator_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
 		FrontierNav frontierNav = new FrontierNav(mira);
 		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		frontierNav.addProbe(sitesByID.get(204), DuplicatorProbe.DEFAULT);
@@ -82,7 +81,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_duplicator_booster_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
 		FrontierNav frontierNav = new FrontierNav(mira);
 		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		frontierNav.addProbe(sitesByID.get(204), DuplicatorProbe.DEFAULT);
@@ -97,7 +96,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_multiple_duplicator_booster_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
 		FrontierNav frontierNav = new FrontierNav(mira);
 		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		frontierNav.addProbe(sitesByID.get(204), DuplicatorProbe.DEFAULT);

@@ -1,17 +1,18 @@
 package cardinal.xenoblade.frontiernav.site;
 
+import cardinal.xenoblade.frontiernav.ResourceHelper;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MiraLoaderTest {
+
 	@Test
 	void check_mira_load_from_file() throws IOException {
 		// When
-		Mira mira = MiraLoader.loadMira(Path.of("input/simple/sites.tsv"), Path.of("input/simple/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("simple/sites.tsv"), ResourceHelper.getResourcePath("simple/network.tsv"));
 
 		// Then
 		Site fn112 = new Site(112, MiraniumRank.A, RevenueRank.F);
