@@ -66,7 +66,7 @@ public class FrontierNav {
 		Probe probe = getProbe(site);
 		if (probe instanceof DuplicatorProbe) {
 			Set<Site> connectedSites = mira.getConnectedSites(site);
-			return computeDuplicator(site, connectedSites, __ -> siteValue, FrontierNav::getMiraniumMultiplier, MiningProbe.class);
+			return computeDuplicator(site, connectedSites, _ -> siteValue, FrontierNav::getMiraniumMultiplier, MiningProbe.class);
 		}
 		int siteMultiplier = getMiraniumMultiplier(probe);
 		int boostMultipliers = computeBoostMultiplier(site, probe, MiningProbe.class);
@@ -83,8 +83,8 @@ public class FrontierNav {
 		Probe probe = getProbe(site);
 		if (probe instanceof DuplicatorProbe) {
 			Set<Site> connectedSites = mira.getConnectedSites(site);
-			return computeDuplicator(site, connectedSites, __ -> siteValue, FrontierNav::getRevenueMultiplier, ResearchProbe.class)
-					+ computeDuplicator(site, connectedSites, connected -> getRevenueBonus(getProbe(connected), site), __ -> 100, ResearchProbe.class);
+			return computeDuplicator(site, connectedSites, _ -> siteValue, FrontierNav::getRevenueMultiplier, ResearchProbe.class)
+					+ computeDuplicator(site, connectedSites, connected -> getRevenueBonus(getProbe(connected), site), _ -> 100, ResearchProbe.class);
 		}
 		int siteMultiplier = getRevenueMultiplier(probe);
 		int boostMultipliers = computeBoostMultiplier(site, probe, ResearchProbe.class);
@@ -106,7 +106,7 @@ public class FrontierNav {
 		Probe probe = getProbe(site);
 		if (probe instanceof DuplicatorProbe) {
 			Set<Site> connectedSites = mira.getConnectedSites(site);
-			return computeDuplicator(site, connectedSites, connected -> getMiraniumStorage(getProbe(connected)), __ -> 100, StorageProbe.class);
+			return computeDuplicator(site, connectedSites, connected -> getMiraniumStorage(getProbe(connected)), _ -> 100, StorageProbe.class);
 		}
 		int siteValue = getMiraniumStorage(probe);
 		int boostMultipliers = computeBoostMultiplier(site, probe, StorageProbe.class);
