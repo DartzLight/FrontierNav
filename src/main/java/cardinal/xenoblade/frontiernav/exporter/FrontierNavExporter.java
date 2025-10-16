@@ -2,7 +2,7 @@ package cardinal.xenoblade.frontiernav.exporter;
 
 import cardinal.xenoblade.frontiernav.FrontierNav;
 import cardinal.xenoblade.frontiernav.FrontierNavLoader;
-import cardinal.xenoblade.frontiernav.probe.*;
+import cardinal.xenoblade.frontiernav.probe.Probe;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
@@ -18,30 +18,6 @@ import java.util.stream.Stream;
 
 public class FrontierNavExporter {
 
-	private static final Map<? extends Probe, Integer> PROBES_IDS = Map.ofEntries(
-			Map.entry(BasicProbe.DEFAULT, 1),
-			Map.entry(MiningProbe.G1, 2),
-			Map.entry(MiningProbe.G2, 3),
-			Map.entry(MiningProbe.G3, 4),
-			Map.entry(MiningProbe.G4, 5),
-			Map.entry(MiningProbe.G5, 6),
-			Map.entry(MiningProbe.G6, 7),
-			Map.entry(MiningProbe.G7, 8),
-			Map.entry(MiningProbe.G8, 9),
-			Map.entry(MiningProbe.G9, 10),
-			Map.entry(MiningProbe.G10, 11),
-			Map.entry(ResearchProbe.G1, 12),
-			Map.entry(ResearchProbe.G2, 13),
-			Map.entry(ResearchProbe.G3, 14),
-			Map.entry(ResearchProbe.G4, 15),
-			Map.entry(ResearchProbe.G5, 16),
-			Map.entry(ResearchProbe.G6, 17),
-			Map.entry(BoosterProbe.G1, 18),
-			Map.entry(BoosterProbe.G2, 19),
-			Map.entry(DuplicatorProbe.DEFAULT, 20),
-			Map.entry(StorageProbe.DEFAULT, 21)
-	);
-
 	private FrontierNavExporter() {
 	}
 
@@ -56,8 +32,8 @@ public class FrontierNavExporter {
 
 		return export.entrySet()
 				.stream()
-				.map(entry -> entry.getKey() + "-" + entry.getValue())
-				.collect(Collectors.joining("~"));
+				.map(entry -> entry.getKey() + ImportExportFormat.PROBE_TO_SITE_DELIMITER + entry.getValue())
+				.collect(Collectors.joining(ImportExportFormat.SITES_DELIMITER));
 	}
 
 	private static void fillValues(TreeMap<Integer, Integer> export, Map<Site, Probe> probes) {
@@ -65,7 +41,7 @@ public class FrontierNavExporter {
 	}
 
 	private static Integer mapToProbeID(Probe value) {
-		return PROBES_IDS.get(value);
+		return ImportExportFormat.PROBE_TO_ID_MAP.get(value);
 	}
 
 	private static void fillMissingValues(TreeMap<Integer, Integer> export, Mira mira) {
