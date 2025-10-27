@@ -45,8 +45,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_all_custom_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, ResourceHelper.getResourcePath("complete/probes.tsv"));
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"), ResourceHelper.getResourcePath("complete/probes.tsv"));
 		assertThat(frontierNav.getMiranium()).isEqualTo(61166);
 		assertThat(frontierNav.getRevenue()).isEqualTo(213025);
 		assertThat(frontierNav.getStorage()).isEqualTo(72300);

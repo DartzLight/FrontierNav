@@ -4,7 +4,6 @@ import cardinal.xenoblade.frontiernav.FrontierNav;
 import cardinal.xenoblade.frontiernav.FrontierNavLoader;
 import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.site.Mira;
-import cardinal.xenoblade.frontiernav.site.MiraLoader;
 import cardinal.xenoblade.frontiernav.site.Site;
 
 import java.io.IOException;
@@ -47,9 +46,13 @@ public class FrontierNavExporter {
 	}
 
 	public static String exportToString(FrontierNav frontierNav) {
+		return exportToString(frontierNav.getMira(), frontierNav.getProbes());
+	}
+
+	public static String exportToString(Mira mira, Map<Site, Probe> probes) {
 		TreeMap<Integer, Integer> export = new TreeMap<>();
-		fillValues(export, frontierNav);
-		fillMissingValues(export, frontierNav);
+		fillValues(export, probes);
+		fillMissingValues(export, mira);
 
 		return export.entrySet()
 				.stream()
@@ -57,18 +60,16 @@ public class FrontierNavExporter {
 				.collect(Collectors.joining("~"));
 	}
 
-	private static void fillValues(TreeMap<Integer, Integer> export, FrontierNav frontierNav) {
-		frontierNav.getProbes()
-				.forEach((key, value) -> export.put(key.id(), mapToProbeID(value)));
+	private static void fillValues(TreeMap<Integer, Integer> export, Map<Site, Probe> probes) {
+		probes.forEach((key, value) -> export.put(key.id(), mapToProbeID(value)));
 	}
 
 	private static Integer mapToProbeID(Probe value) {
 		return PROBES_IDS.get(value);
 	}
 
-	private static void fillMissingValues(TreeMap<Integer, Integer> export, FrontierNav frontierNav) {
-		Set<Integer> sites = frontierNav.getMira()
-				.getSites()
+	private static void fillMissingValues(TreeMap<Integer, Integer> export, Mira mira) {
+		Set<Integer> sites = mira.getSites()
 				.stream()
 				.map(Site::id)
 				.collect(Collectors.toSet());
@@ -88,9 +89,8 @@ public class FrontierNavExporter {
 				});
 	}
 
-	public static void main(String[] args) throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, Path.of("input/probes.tsv"));
+	static void main() throws IOException {
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(Path.of("input/sites.tsv"), Path.of("input/network.tsv"), Path.of("input/probes.tsv"));
 		System.out.println(exportToString(frontierNav));
 	}
 
