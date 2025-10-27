@@ -87,8 +87,7 @@ class FrontierNavTest {
 	@ParameterizedTest
 	@MethodSource("args")
 	void check_map_exploitation_for_4_sites_in_line(Mira mira, Map<Site, Probe> probes, int expectedMiranium, int expectedRevenue, int expectedStorage) {
-		FrontierNav frontierNav = new FrontierNav(mira);
-		probes.forEach(frontierNav::addProbe);
+		FrontierNav frontierNav = new FrontierNav(mira, probes);
 		assertThat(frontierNav.getMiranium()).isEqualTo(expectedMiranium);
 		assertThat(frontierNav.getRevenue()).isEqualTo(expectedRevenue);
 		assertThat(frontierNav.getStorage()).isEqualTo(expectedStorage);

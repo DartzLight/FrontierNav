@@ -4,8 +4,6 @@ import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.ToIntBiFunction;
@@ -16,29 +14,23 @@ public class FrontierNav {
 	private static final int DEFAULT_MIRANIUM_STORAGE = 6000;
 
 	private final Mira mira;
-	private final Map<Site, Probe> probes = new HashMap<>();
+	private final Map<Site, Probe> probes;
+
+	public FrontierNav(Mira mira, Map<Site, Probe> probes) {
+		this.mira = mira;
+		this.probes = Map.copyOf(probes);
+	}
 
 	public Mira getMira() {
 		return mira;
 	}
 
-	public FrontierNav(Mira mira) {
-		this.mira = mira;
-	}
-
-	public void addProbe(Site site, Probe probe) {
-		if (probe instanceof BasicProbe) {
-			return;
-		}
-		probes.put(site, probe);
+	public Map<Site, Probe> getProbes() {
+		return probes;
 	}
 
 	private Probe getProbe(Site site) {
 		return probes.getOrDefault(site, BasicProbe.DEFAULT);
-	}
-
-	public Map<Site, Probe> getProbes() {
-		return Map.copyOf(probes);
 	}
 
 	public int getMiranium() {
@@ -134,7 +126,7 @@ public class FrontierNav {
 
 	private int computeChainMultiplier(Site site, Probe probe, Class<? extends Probe> multipliableProbeType) {
 		if (canHaveMultiplier(probe, multipliableProbeType)) {
-			int chain = mira.computeChain(site, Collections.unmodifiableMap(probes));
+			int chain = mira.computeChain(site, probes);
 			return getChainMultiplier(chain);
 		}
 		return 100;

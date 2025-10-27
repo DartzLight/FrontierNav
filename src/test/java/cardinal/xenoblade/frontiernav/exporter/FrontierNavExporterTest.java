@@ -25,8 +25,9 @@ class FrontierNavExporterTest {
 	void should_export_configuration() {
 		// Given
 		Mira mira = buildMira();
-		FrontierNav frontierNav = buildFronterNav(mira);
-
+		Map<Site, Probe> probes = buildProbes();
+		FrontierNav frontierNav = new FrontierNav(mira, probes);
+		
 		// When
 		String exported = FrontierNavExporter.exportToString(frontierNav);
 
@@ -66,30 +67,30 @@ class FrontierNavExporterTest {
 				.build();
 	}
 
-	private static FrontierNav buildFronterNav(Mira mira) {
-		FrontierNav frontierNav = new FrontierNav(mira);
-		frontierNav.addProbe(SITES.get(101), BasicProbe.DEFAULT);
-		frontierNav.addProbe(SITES.get(102), MiningProbe.G1);
-		frontierNav.addProbe(SITES.get(103), MiningProbe.G2);
-		frontierNav.addProbe(SITES.get(104), MiningProbe.G3);
-		frontierNav.addProbe(SITES.get(105), MiningProbe.G4);
-		frontierNav.addProbe(SITES.get(106), MiningProbe.G5);
-		frontierNav.addProbe(SITES.get(107), MiningProbe.G6);
-		frontierNav.addProbe(SITES.get(108), MiningProbe.G7);
-		frontierNav.addProbe(SITES.get(109), MiningProbe.G8);
-		frontierNav.addProbe(SITES.get(110), MiningProbe.G9);
-		frontierNav.addProbe(SITES.get(111), MiningProbe.G10);
-		frontierNav.addProbe(SITES.get(112), ResearchProbe.G1);
-		frontierNav.addProbe(SITES.get(113), ResearchProbe.G2);
-		frontierNav.addProbe(SITES.get(114), ResearchProbe.G3);
-		frontierNav.addProbe(SITES.get(115), ResearchProbe.G4);
-		frontierNav.addProbe(SITES.get(116), ResearchProbe.G5);
-		frontierNav.addProbe(SITES.get(117), ResearchProbe.G6);
-		frontierNav.addProbe(SITES.get(118), BoosterProbe.G1);
-		frontierNav.addProbe(SITES.get(119), BoosterProbe.G2);
-		frontierNav.addProbe(SITES.get(120), DuplicatorProbe.DEFAULT);
-		frontierNav.addProbe(SITES.get(121), StorageProbe.DEFAULT);
-		return frontierNav;
+	private static Map<Site, Probe> buildProbes() {
+		return Map.ofEntries(
+				Map.entry(SITES.get(101), BasicProbe.DEFAULT),
+				Map.entry(SITES.get(102), MiningProbe.G1),
+				Map.entry(SITES.get(103), MiningProbe.G2),
+				Map.entry(SITES.get(104), MiningProbe.G3),
+				Map.entry(SITES.get(105), MiningProbe.G4),
+				Map.entry(SITES.get(106), MiningProbe.G5),
+				Map.entry(SITES.get(107), MiningProbe.G6),
+				Map.entry(SITES.get(108), MiningProbe.G7),
+				Map.entry(SITES.get(109), MiningProbe.G8),
+				Map.entry(SITES.get(110), MiningProbe.G9),
+				Map.entry(SITES.get(111), MiningProbe.G10),
+				Map.entry(SITES.get(112), ResearchProbe.G1),
+				Map.entry(SITES.get(113), ResearchProbe.G2),
+				Map.entry(SITES.get(114), ResearchProbe.G3),
+				Map.entry(SITES.get(115), ResearchProbe.G4),
+				Map.entry(SITES.get(116), ResearchProbe.G5),
+				Map.entry(SITES.get(117), ResearchProbe.G6),
+				Map.entry(SITES.get(118), BoosterProbe.G1),
+				Map.entry(SITES.get(119), BoosterProbe.G2),
+				Map.entry(SITES.get(120), DuplicatorProbe.DEFAULT),
+				Map.entry(SITES.get(121), StorageProbe.DEFAULT)
+		);
 	}
 
 	private static Site newSite(int id) {

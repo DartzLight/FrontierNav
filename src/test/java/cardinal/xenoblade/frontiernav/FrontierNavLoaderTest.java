@@ -1,6 +1,7 @@
 package cardinal.xenoblade.frontiernav;
 
 import cardinal.xenoblade.frontiernav.probe.MiningProbe;
+import cardinal.xenoblade.frontiernav.probe.Probe;
 import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraniumRank;
@@ -31,12 +32,14 @@ class FrontierNavLoaderTest {
 		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(mira, ResourceHelper.getResourcePath("simple/probes.tsv"));
 
 		// Then
-		FrontierNav expected = new FrontierNav(mira);
 		Map<Integer, Site> sitesByID = mira.getSitesByID();
-		expected.addProbe(sitesByID.get(112), MiningProbe.G1);
-		expected.addProbe(sitesByID.get(114), MiningProbe.G1);
-		expected.addProbe(sitesByID.get(116), MiningProbe.G1);
-		expected.addProbe(sitesByID.get(117), ResearchProbe.G1);
+		Map<Site, Probe> probes = Map.of(
+				sitesByID.get(112), MiningProbe.G1,
+				sitesByID.get(114), MiningProbe.G1,
+				sitesByID.get(116), MiningProbe.G1,
+				sitesByID.get(117), ResearchProbe.G1
+		);
+		FrontierNav expected = new FrontierNav(mira, probes);
 		assertThat(frontierNav.getMiranium()).isEqualTo(expected.getMiranium());
 		assertThat(frontierNav.getRevenue()).isEqualTo(expected.getRevenue());
 		assertThat(frontierNav.getStorage()).isEqualTo(expected.getStorage());

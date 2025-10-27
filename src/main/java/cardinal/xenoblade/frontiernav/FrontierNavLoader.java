@@ -8,29 +8,26 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FrontierNavLoader {
 
-	private record SiteProbe(Site site, Probe probe) {}
-
 	public static FrontierNav loadFrontierNav(Mira mira, Path probesPath) throws IOException {
 		Map<Integer, Site> sitesById = mira.getSitesByID();
-		List<SiteProbe> probes = loadProbes(probesPath, sitesById);
-		FrontierNav frontierNav = new FrontierNav(mira);
-		probes.forEach(x -> frontierNav.addProbe(x.site, x.probe));
-		return frontierNav;
+		Map<Site, Probe> probes = loadProbes(probesPath, sitesById);
+		return new FrontierNav(mira, probes);
 	}
 
-	private static List<SiteProbe> loadProbes(Path probesPath, Map<Integer, Site> siteById) throws IOException {
+	private static Map<Site, Probe> loadProbes(Path probesPath, Map<Integer, Site> siteById) throws IOException {
+		record SiteProbe(Site site, Probe probe) {}
 		try (var lines = Files.lines(probesPath)) {
 			return lines.map(line -> line.split("\t"))
 					.map(cells -> new SiteProbe(
 							siteById.get(cells[0].transform(Integer::parseInt)),
 							cells[1].transform(FrontierNavLoader::parseProbe)
 					))
-					.toList();
+					.collect(Collectors.toUnmodifiableMap(SiteProbe::site, SiteProbe::probe));
 		}
 	}
 
