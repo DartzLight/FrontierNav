@@ -18,12 +18,11 @@ public class FrontierNavImporter {
 	}
 
 	public static Map<Site, Probe> importProbes(Mira mira, String encoded) {
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		return Arrays.stream(encoded.split(ImportExportFormat.SITES_DELIMITER))
 				.map(token -> token.split(ImportExportFormat.PROBE_TO_SITE_DELIMITER))
 				.collect(Collectors.toUnmodifiableMap(tokens -> {
 					int siteID = tokens[0].transform(Integer::parseInt);
-					return sitesByID.get(siteID);
+					return mira.getSite(siteID);
 				}, tokens -> {
 					int probeID = tokens[1].transform(Integer::parseInt);
 					if (probeID == 0) {

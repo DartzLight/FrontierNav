@@ -48,12 +48,11 @@ class FrontierNavLoaderTest {
 	}
 
 	private static Map<Site, Probe> buildProbes(Mira mira) {
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		return Map.of(
-				sitesByID.get(112), MiningProbe.G1,
-				sitesByID.get(114), MiningProbe.G1,
-				sitesByID.get(116), MiningProbe.G1,
-				sitesByID.get(117), ResearchProbe.G1
+				mira.getSite(112), MiningProbe.G1,
+				mira.getSite(114), MiningProbe.G1,
+				mira.getSite(116), MiningProbe.G1,
+				mira.getSite(117), ResearchProbe.G1
 		);
 	}
 

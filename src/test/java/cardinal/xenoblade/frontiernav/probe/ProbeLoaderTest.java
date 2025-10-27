@@ -30,12 +30,11 @@ class ProbeLoaderTest {
 		Map<Site, Probe> probes = ProbeLoader.loadProbes(ResourceHelper.getResourcePath("simple/probes.tsv"), mira);
 
 		// Then
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		Map<Site, Probe> expected = Map.of(
-				sitesByID.get(112), MiningProbe.G1,
-				sitesByID.get(114), MiningProbe.G1,
-				sitesByID.get(116), MiningProbe.G1,
-				sitesByID.get(117), ResearchProbe.G1
+				mira.getSite(112), MiningProbe.G1,
+				mira.getSite(114), MiningProbe.G1,
+				mira.getSite(116), MiningProbe.G1,
+				mira.getSite(117), ResearchProbe.G1
 		);
 		assertThat(probes).isEqualTo(expected);
 	}

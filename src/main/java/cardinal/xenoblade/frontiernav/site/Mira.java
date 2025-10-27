@@ -16,23 +16,26 @@ import java.util.stream.Collectors;
 
 public class Mira {
 	private final SimpleGraph<Site, DefaultEdge> graph;
+	private final Set<Site> sites;
+	private final Map<Integer, Site> siteByID;
 
 	private Mira(SimpleGraph<Site, DefaultEdge> graph) {
 		this.graph = graph;
-	}
-
-	public Set<Site> getSites() {
-		return graph.vertexSet();
-	}
-
-	public Map<Integer, Site> getSitesByID() {
-		return getSites()
-				.stream()
+		this.sites = Set.copyOf(graph.vertexSet());
+		this.siteByID = sites.stream()
 				.collect(Collectors.toUnmodifiableMap(Site::id, Function.identity()));
 	}
 
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	public Set<Site> getSites() {
+		return sites;
+	}
+
+	public Site getSite(int siteID) {
+		return siteByID.get(siteID);
 	}
 
 	public int computeChain(Site site, Map<Site, Probe> probes) {
@@ -41,9 +44,8 @@ public class Mira {
 			return 1;
 		}
 
-		Set<Site> sameProbe = getSites()
-				.stream()
-				.filter(s -> probes.get(s) == probe)
+		Set<Site> sameProbe = sites.stream()
+				.filter(s -> probe.equals(probes.get(s)))
 				.collect(Collectors.toSet());
 		Graph<Site, DefaultEdge> subgraph = new AsSubgraph<>(graph, sameProbe);
 

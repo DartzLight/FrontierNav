@@ -112,15 +112,15 @@ public class FrontierNav {
 				.sum();
 	}
 
-	private int computeDuplicator(Site origineSite, Site connectedSite, ToIntFunction<Site> valueRetriever, ToIntFunction<Probe> siteMultiplierRetriever, Class<? extends Probe> multipliableProbeType) {
+	private int computeDuplicator(Site originSite, Site connectedSite, ToIntFunction<Site> valueRetriever, ToIntFunction<Probe> siteMultiplierRetriever, Class<? extends Probe> multipliableProbeType) {
 		Probe probe = getProbe(connectedSite);
 		if (probe instanceof DuplicatorProbe) {
 			return 0;
 		}
 		int value = valueRetriever.applyAsInt(connectedSite);
 		int siteMultiplier = siteMultiplierRetriever.applyAsInt(probe);
-		int boostMultiplier = computeBoostMultiplier(origineSite, probe, multipliableProbeType);
-		int chainMultiplier = computeChainMultiplier(origineSite, probe, multipliableProbeType);
+		int boostMultiplier = computeBoostMultiplier(originSite, probe, multipliableProbeType);
+		int chainMultiplier = computeChainMultiplier(originSite, probe, multipliableProbeType);
 		return applyMultipliers(value, siteMultiplier, boostMultiplier, chainMultiplier);
 	}
 

@@ -13,12 +13,11 @@ import java.util.stream.Collectors;
 public class ProbeLoader {
 
 	public static Map<Site, Probe> loadProbes(Path probesPath, Mira mira) throws IOException {
-		Map<Integer, Site> sitesById = mira.getSitesByID();
 		record SiteProbe(Site site, Probe probe) {}
 		try (var lines = Files.lines(probesPath)) {
 			return lines.map(line -> line.split("\t"))
 					.map(cells -> new SiteProbe(
-							sitesById.get(cells[0].transform(Integer::parseInt)),
+							mira.getSite(cells[0].transform(Integer::parseInt)),
 							cells[1].transform(ProbeLoader::parseProbe)
 					))
 					.collect(Collectors.toUnmodifiableMap(SiteProbe::site, SiteProbe::probe));

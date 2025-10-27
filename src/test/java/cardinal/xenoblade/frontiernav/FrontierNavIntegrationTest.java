@@ -22,12 +22,11 @@ class FrontierNavIntegrationTest {
 				.addSite(fn112).addSite(fn114).addSite(fn116).addSite(fn117)
 				.addConnection(fn112, fn114).addConnection(fn114, fn116).addConnection(fn116, fn117)
 				.build();
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		Map<Site, Probe> probes = new HashMap<>();
-		probes.put(sitesByID.get(112), MiningProbe.G1);
-		probes.put(sitesByID.get(114), MiningProbe.G1);
-		probes.put(sitesByID.get(116), MiningProbe.G1);
-		probes.put(sitesByID.get(117), ResearchProbe.G1);
+		probes.put(mira.getSite(112), MiningProbe.G1);
+		probes.put(mira.getSite(114), MiningProbe.G1);
+		probes.put(mira.getSite(116), MiningProbe.G1);
+		probes.put(mira.getSite(117), ResearchProbe.G1);
 		FrontierNav frontierNav = new FrontierNav(mira, probes);
 		assertThat(frontierNav.getMiranium()).isEqualTo(1775);
 		assertThat(frontierNav.getRevenue()).isEqualTo(3185);
@@ -54,13 +53,12 @@ class FrontierNavIntegrationTest {
 	@Test
 	void check_booster_probes() throws IOException {
 		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		Map<Site, Probe> probes = Map.of(
-				sitesByID.get(112), BoosterProbe.G2,
-				sitesByID.get(114), MiningProbe.G1,
-				sitesByID.get(116), BoosterProbe.G1,
-				sitesByID.get(117), ResearchProbe.G1,
-				sitesByID.get(118), BoosterProbe.G1
+				mira.getSite(112), BoosterProbe.G2,
+				mira.getSite(114), MiningProbe.G1,
+				mira.getSite(116), BoosterProbe.G1,
+				mira.getSite(117), ResearchProbe.G1,
+				mira.getSite(118), BoosterProbe.G1
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, probes);
 		assertThat(frontierNav.getMiranium()).isEqualTo(16575);
@@ -71,12 +69,11 @@ class FrontierNavIntegrationTest {
 	@Test
 	void check_duplicator_probes() throws IOException {
 		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		Map<Site, Probe> probes = Map.of(
-				sitesByID.get(204), DuplicatorProbe.DEFAULT,
-				sitesByID.get(203), ResearchProbe.G6,
-				sitesByID.get(205), MiningProbe.G10,
-				sitesByID.get(211), StorageProbe.DEFAULT
+				mira.getSite(204), DuplicatorProbe.DEFAULT,
+				mira.getSite(203), ResearchProbe.G6,
+				mira.getSite(205), MiningProbe.G10,
+				mira.getSite(211), StorageProbe.DEFAULT
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, probes);
 		assertThat(frontierNav.getMiranium()).isEqualTo(19250);
@@ -87,13 +84,12 @@ class FrontierNavIntegrationTest {
 	@Test
 	void check_duplicator_booster_probes() throws IOException {
 		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		Map<Site, Probe> probes = Map.of(
-				sitesByID.get(204), DuplicatorProbe.DEFAULT,
-				sitesByID.get(203), ResearchProbe.G6,
-				sitesByID.get(205), MiningProbe.G10,
-				sitesByID.get(211), StorageProbe.DEFAULT,
-				sitesByID.get(212), BoosterProbe.G1
+				mira.getSite(204), DuplicatorProbe.DEFAULT,
+				mira.getSite(203), ResearchProbe.G6,
+				mira.getSite(205), MiningProbe.G10,
+				mira.getSite(211), StorageProbe.DEFAULT,
+				mira.getSite(212), BoosterProbe.G1
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, probes);
 		assertThat(frontierNav.getMiranium()).isEqualTo(20410);
@@ -104,13 +100,12 @@ class FrontierNavIntegrationTest {
 	@Test
 	void check_multiple_duplicator_booster_probes() throws IOException {
 		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
-		Map<Integer, Site> sitesByID = mira.getSitesByID();
 		Map<Site, Probe> probes = Map.of(
-				sitesByID.get(204), DuplicatorProbe.DEFAULT,
-				sitesByID.get(203), ResearchProbe.G6,
-				sitesByID.get(205), MiningProbe.G10,
-				sitesByID.get(211), DuplicatorProbe.DEFAULT,
-				sitesByID.get(212), BoosterProbe.G1
+				mira.getSite(204), DuplicatorProbe.DEFAULT,
+				mira.getSite(203), ResearchProbe.G6,
+				mira.getSite(205), MiningProbe.G10,
+				mira.getSite(211), DuplicatorProbe.DEFAULT,
+				mira.getSite(212), BoosterProbe.G1
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, probes);
 		assertThat(frontierNav.getMiranium()).isEqualTo(20560);
