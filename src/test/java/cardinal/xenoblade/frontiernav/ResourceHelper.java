@@ -12,7 +12,7 @@ public class ResourceHelper {
 		try {
 			return Path.of(ResourceHelper.class.getClassLoader().getResource(name).toURI());
 		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
+			throw new IllegalStateException(e);
 		}
 	}
 
