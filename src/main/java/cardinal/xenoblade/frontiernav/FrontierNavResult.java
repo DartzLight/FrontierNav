@@ -27,6 +27,11 @@ public class FrontierNavResult {
 		return storage;
 	}
 
+	@Override
+	public String toString() {
+		return "Miranium: " + miranium + "/" + storage + " | Revenue: " + revenue;
+	}
+
 	public static FrontierNavResult compute(FrontierNav frontierNav) {
 		int miranium = frontierNav.getMiranium();
 		int revenue = frontierNav.getRevenue();
