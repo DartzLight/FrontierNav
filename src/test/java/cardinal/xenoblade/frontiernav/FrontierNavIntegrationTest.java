@@ -102,14 +102,14 @@ class FrontierNavIntegrationTest {
 		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("complete/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
 		Map<Site, Probe> probes = Map.of(
 				mira.getSite(204), DuplicatorProbe.DEFAULT,
-				mira.getSite(203), ResearchProbe.G6,
+				mira.getSite(203), BoosterProbe.G2,
 				mira.getSite(205), MiningProbe.G10,
 				mira.getSite(211), DuplicatorProbe.DEFAULT,
 				mira.getSite(212), BoosterProbe.G1
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, probes);
-		assertThat(frontierNav.getMiranium()).isEqualTo(20560);
-		assertThat(frontierNav.getRevenue()).isEqualTo(35859);
+		assertThat(frontierNav.getMiranium()).isEqualTo(24910);
+		assertThat(frontierNav.getRevenue()).isEqualTo(27215);
 		assertThat(frontierNav.getStorage()).isEqualTo(6000);
 	}
 

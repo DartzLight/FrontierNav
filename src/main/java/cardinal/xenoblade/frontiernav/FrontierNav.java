@@ -162,8 +162,7 @@ public class FrontierNav {
 			return connectedSites.stream()
 					.filter(connected -> !(getProbe(connected) instanceof DuplicatorProbe))
 					.mapToInt(this::computeBoostMultiplier)
-					.map(x -> x - 100)
-					.sum() + 100;
+					.reduce(100, FrontierNav::applyMultiplier);
 		}
 		return probe.getBoostMultiplier();
 	}
