@@ -126,10 +126,14 @@ public class FrontierNav {
 
 	private int computeChainMultiplier(Site site, Probe probe, Class<? extends Probe> multipliableProbeType) {
 		if (canHaveMultiplier(probe, multipliableProbeType)) {
-			int chain = mira.computeChain(site, probes);
-			return getChainMultiplier(chain);
+			return computeChainMultiplier(site);
 		}
 		return 100;
+	}
+
+	private int computeChainMultiplier(Site site) {
+		int chain = mira.computeChain(site, probes);
+		return getChainMultiplier(chain);
 	}
 
 	private static int getChainMultiplier(int chain) {
@@ -147,21 +151,25 @@ public class FrontierNav {
 
 	private int computeBoostMultiplier(Site site, Probe probe, Class<? extends Probe> multipliableProbeType) {
 		if (canHaveMultiplier(probe, multipliableProbeType)) {
-			Set<Site> connectedSites = mira.getConnectedSites(site);
-			return connectedSites.stream()
-					.mapToInt(this::computeBoostMultiplier)
-					.reduce(100, FrontierNav::applyMultiplier);
+			return computeIncomingBoostMultiplier(site);
 		}
 		return 100;
 	}
 
-	private int computeBoostMultiplier(Site site) {
+	private int computeIncomingBoostMultiplier(Site site) {
+		Set<Site> connectedSites = mira.getConnectedSites(site);
+		return connectedSites.stream()
+				.mapToInt(this::computeOutgoingBoostMultiplier)
+				.reduce(100, FrontierNav::applyMultiplier);
+	}
+
+	private int computeOutgoingBoostMultiplier(Site site) {
 		Probe probe = getProbe(site);
 		if (probe instanceof DuplicatorProbe) {
 			Set<Site> connectedSites = mira.getConnectedSites(site);
 			return connectedSites.stream()
 					.filter(connected -> !(getProbe(connected) instanceof DuplicatorProbe))
-					.mapToInt(this::computeBoostMultiplier)
+					.mapToInt(this::computeOutgoingBoostMultiplier)
 					.reduce(100, FrontierNav::applyMultiplier);
 		}
 		return probe.getBoostMultiplier();
