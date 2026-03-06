@@ -11,13 +11,13 @@ class MiraLoaderTest {
 
 	@Test
 	void check_mira_load_from_file_with_simple_network() throws IOException {
-		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("simple/sites.tsv"), ResourceHelper.getResourcePath("simple/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("simple/sites.tsv"), ResourceHelper.getResourcePath("simple/network.tsv"), ResourceHelper.getResourcePath("complete/resources.tsv"));
 		check(mira);
 	}
 
 	@Test
 	void check_mira_load_from_file_with_network_containing_not_unlocked_sites() throws IOException {
-		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("simple/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"));
+		Mira mira = MiraLoader.loadMira(ResourceHelper.getResourcePath("simple/sites.tsv"), ResourceHelper.getResourcePath("complete/network.tsv"), ResourceHelper.getResourcePath("complete/resources.tsv"));
 		check(mira);
 	}
 

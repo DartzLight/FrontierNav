@@ -10,14 +10,14 @@ import java.nio.file.Path;
 
 public class FrontierNavLoader {
 
-	public static FrontierNav loadFrontierNav(Path sitesPath, Path networkPath, Path probesPath) throws IOException {
-		Mira mira = MiraLoader.loadMira(sitesPath, networkPath);
+	public static FrontierNav loadFrontierNav(Path sitesPath, Path networkPath, Path preciousResourcesPath, Path probesPath) throws IOException {
+		Mira mira = MiraLoader.loadMira(sitesPath, networkPath, preciousResourcesPath);
 		ProbeLayout probeLayout = ProbeLayoutLoader.loadProbes(probesPath, mira);
 		return new FrontierNav(mira, probeLayout);
 	}
 
 	static void main() throws IOException {
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(Path.of("input/sites.tsv"), Path.of("input/network.tsv"), Path.of("input/probes.tsv"));
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(Path.of("input/sites.tsv"), Path.of("input/network.tsv"), Path.of("input/resources.tsv"), Path.of("input/probes.tsv"));
 		FrontierNavResult result = FrontierNavResult.compute(frontierNav.getMira(), frontierNav.getProbeLayout());
 		System.out.println(result);
 	}

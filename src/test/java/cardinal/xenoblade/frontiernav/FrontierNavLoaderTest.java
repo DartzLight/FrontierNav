@@ -23,10 +23,11 @@ class FrontierNavLoaderTest {
 		// Given
 		Path sitesPath = ResourceHelper.getResourcePath("simple/sites.tsv");
 		Path networkPath = ResourceHelper.getResourcePath("simple/network.tsv");
+		Path preciousResourcesPath = ResourceHelper.getResourcePath("complete/resources.tsv");
 		Path probesPath = ResourceHelper.getResourcePath("simple/probes.tsv");
 
 		// When
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(sitesPath, networkPath, probesPath);
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(sitesPath, networkPath, preciousResourcesPath, probesPath);
 
 		// Then
 		Mira mira = buildMira();
