@@ -16,11 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FrontierNavTest {
 
-	public static final Site FN_112 = new Site(112, MiraniumRank.A, RevenueRank.F);
-	public static final Site FN_114 = new Site(114, MiraniumRank.C, RevenueRank.E);
-	public static final Site FN_116 = new Site(116, MiraniumRank.A, RevenueRank.D);
-	public static final Site FN_117 = new Site(117, MiraniumRank.A, RevenueRank.D, 1);
-	public static final Mira MIRA = Mira.builder()
+	private static final Site FN_112 = new Site(112, MiraniumRank.A, RevenueRank.F);
+	private static final Site FN_114 = new Site(114, MiraniumRank.C, RevenueRank.E);
+	private static final Site FN_116 = new Site(116, MiraniumRank.A, RevenueRank.D);
+	private static final Site FN_117 = new Site(117, MiraniumRank.A, RevenueRank.D, 1);
+	private static final Mira MIRA = Mira.builder()
 			.addSite(FN_112).addSite(FN_114).addSite(FN_116).addSite(FN_117)
 			.addConnection(FN_112, FN_114).addConnection(FN_114, FN_116).addConnection(FN_116, FN_117)
 			.build();
