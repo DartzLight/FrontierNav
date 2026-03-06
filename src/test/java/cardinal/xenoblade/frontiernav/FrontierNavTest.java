@@ -1,6 +1,7 @@
 package cardinal.xenoblade.frontiernav;
 
 import cardinal.xenoblade.frontiernav.probe.*;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraniumRank;
 import cardinal.xenoblade.frontiernav.site.RevenueRank;
@@ -87,7 +88,7 @@ class FrontierNavTest {
 	@ParameterizedTest
 	@MethodSource("args")
 	void check_map_exploitation_for_4_sites_in_line(Mira mira, Map<Site, Probe> probes, int expectedMiranium, int expectedRevenue, int expectedStorage) {
-		FrontierNav frontierNav = new FrontierNav(mira, probes);
+		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(probes));
 		assertThat(frontierNav.getMiranium()).isEqualTo(expectedMiranium);
 		assertThat(frontierNav.getRevenue()).isEqualTo(expectedRevenue);
 		assertThat(frontierNav.getStorage()).isEqualTo(expectedStorage);

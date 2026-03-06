@@ -1,10 +1,10 @@
 package cardinal.xenoblade.frontiernav;
 
 import cardinal.xenoblade.frontiernav.probe.*;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
@@ -14,23 +14,23 @@ public class FrontierNav {
 	private static final int DEFAULT_MIRANIUM_STORAGE = 6000;
 
 	private final Mira mira;
-	private final Map<Site, Probe> probes;
+	private final ProbeLayout probeLayout;
 
-	public FrontierNav(Mira mira, Map<Site, Probe> probes) {
+	public FrontierNav(Mira mira, ProbeLayout probeLayout) {
 		this.mira = mira;
-		this.probes = Map.copyOf(probes);
+		this.probeLayout = probeLayout;
 	}
 
 	public Mira getMira() {
 		return mira;
 	}
 
-	public Map<Site, Probe> getProbes() {
-		return probes;
+	public ProbeLayout getProbeLayout() {
+		return probeLayout;
 	}
 
 	private Probe getProbe(Site site) {
-		return probes.getOrDefault(site, BasicProbe.DEFAULT);
+		return probeLayout.getProbe(site);
 	}
 
 	public int getMiranium() {
@@ -132,7 +132,7 @@ public class FrontierNav {
 	}
 
 	private int computeChainMultiplier(Site site) {
-		int chain = mira.computeChain(site, probes);
+		int chain = mira.computeChain(site, probeLayout);
 		return getChainMultiplier(chain);
 	}
 

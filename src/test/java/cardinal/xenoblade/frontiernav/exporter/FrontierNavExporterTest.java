@@ -2,6 +2,7 @@ package cardinal.xenoblade.frontiernav.exporter;
 
 import cardinal.xenoblade.frontiernav.FrontierNav;
 import cardinal.xenoblade.frontiernav.probe.*;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraniumRank;
 import cardinal.xenoblade.frontiernav.site.RevenueRank;
@@ -26,8 +27,8 @@ class FrontierNavExporterTest {
 		// Given
 		Mira mira = buildMira();
 		Map<Site, Probe> probes = buildProbes();
-		FrontierNav frontierNav = new FrontierNav(mira, probes);
-		
+		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(probes));
+
 		// When
 		String exported = FrontierNavExporter.exportToString(frontierNav);
 

@@ -3,12 +3,12 @@ package cardinal.xenoblade.frontiernav.exporter;
 import cardinal.xenoblade.frontiernav.FrontierNav;
 import cardinal.xenoblade.frontiernav.FrontierNavLoader;
 import cardinal.xenoblade.frontiernav.probe.Probe;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -22,12 +22,12 @@ public class FrontierNavExporter {
 	}
 
 	public static String exportToString(FrontierNav frontierNav) {
-		return exportToString(frontierNav.getMira(), frontierNav.getProbes());
+		return exportToString(frontierNav.getMira(), frontierNav.getProbeLayout());
 	}
 
-	public static String exportToString(Mira mira, Map<Site, Probe> probes) {
+	public static String exportToString(Mira mira, ProbeLayout probeLayout) {
 		TreeMap<Integer, Integer> export = new TreeMap<>();
-		fillValues(export, probes);
+		fillValues(export, probeLayout);
 		fillMissingValues(export, mira);
 
 		return export.entrySet()
@@ -36,8 +36,8 @@ public class FrontierNavExporter {
 				.collect(Collectors.joining(ImportExportFormat.SITES_DELIMITER));
 	}
 
-	private static void fillValues(TreeMap<Integer, Integer> export, Map<Site, Probe> probes) {
-		probes.forEach((key, value) -> export.put(key.id(), mapToProbeID(value)));
+	private static void fillValues(TreeMap<Integer, Integer> export, ProbeLayout probeLayout) {
+		probeLayout.probes().forEach((key, value) -> export.put(key.id(), mapToProbeID(value)));
 	}
 
 	private static Integer mapToProbeID(Probe value) {

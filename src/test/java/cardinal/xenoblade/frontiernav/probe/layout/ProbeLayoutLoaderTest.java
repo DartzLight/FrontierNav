@@ -1,6 +1,8 @@
-package cardinal.xenoblade.frontiernav.probe;
+package cardinal.xenoblade.frontiernav.probe.layout;
 
 import cardinal.xenoblade.frontiernav.ResourceHelper;
+import cardinal.xenoblade.frontiernav.probe.MiningProbe;
+import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraniumRank;
 import cardinal.xenoblade.frontiernav.site.RevenueRank;
@@ -12,7 +14,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ProbeLoaderTest {
+class ProbeLayoutLoaderTest {
 
 	@Test
 	void check_probes_load_from_file() throws IOException {
@@ -27,16 +29,16 @@ class ProbeLoaderTest {
 				.build();
 
 		// When
-		Map<Site, Probe> probes = ProbeLoader.loadProbes(ResourceHelper.getResourcePath("simple/probes.tsv"), mira);
+		ProbeLayout probeLayout = ProbeLayoutLoader.loadProbes(ResourceHelper.getResourcePath("simple/probes.tsv"), mira);
 
 		// Then
-		Map<Site, Probe> expected = Map.of(
+		ProbeLayout expected = new ProbeLayout(Map.of(
 				mira.getSite(112), MiningProbe.G1,
 				mira.getSite(114), MiningProbe.G1,
 				mira.getSite(116), MiningProbe.G1,
 				mira.getSite(117), ResearchProbe.G1
-		);
-		assertThat(probes).isEqualTo(expected);
+		));
+		assertThat(probeLayout).isEqualTo(expected);
 	}
 
 }

@@ -3,6 +3,7 @@ package cardinal.xenoblade.frontiernav;
 import cardinal.xenoblade.frontiernav.probe.MiningProbe;
 import cardinal.xenoblade.frontiernav.probe.Probe;
 import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraniumRank;
 import cardinal.xenoblade.frontiernav.site.RevenueRank;
@@ -30,7 +31,7 @@ class FrontierNavLoaderTest {
 		// Then
 		Mira mira = buildMira();
 		Map<Site, Probe> probes = buildProbes(mira);
-		FrontierNav expected = new FrontierNav(mira, probes);
+		FrontierNav expected = new FrontierNav(mira, new ProbeLayout(probes));
 		assertThat(frontierNav.getMiranium()).isEqualTo(expected.getMiranium());
 		assertThat(frontierNav.getRevenue()).isEqualTo(expected.getRevenue());
 		assertThat(frontierNav.getStorage()).isEqualTo(expected.getStorage());

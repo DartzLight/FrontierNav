@@ -1,6 +1,7 @@
 package cardinal.xenoblade.frontiernav;
 
 import cardinal.xenoblade.frontiernav.probe.*;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraniumRank;
 import cardinal.xenoblade.frontiernav.site.RevenueRank;
@@ -32,7 +33,7 @@ class FrontierNavResultTest {
 				FN_5, StorageProbe.DEFAULT
 		);
 
-		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, probes));
+		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, new ProbeLayout(probes)));
 
 		assertThat(result.getMiraniumProduction()).isEqualTo(3300);
 	}
@@ -47,7 +48,7 @@ class FrontierNavResultTest {
 				FN_5, StorageProbe.DEFAULT
 		);
 
-		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, probes));
+		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, new ProbeLayout(probes)));
 
 		assertThat(result.getRevenue()).isEqualTo(7200);
 	}
@@ -62,7 +63,7 @@ class FrontierNavResultTest {
 				FN_5, StorageProbe.DEFAULT
 		);
 
-		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, probes));
+		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, new ProbeLayout(probes)));
 
 		assertThat(result.getStorage()).isEqualTo(12000);
 	}
@@ -77,7 +78,7 @@ class FrontierNavResultTest {
 				FN_5, BoosterProbe.G2
 		);
 
-		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, probes));
+		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, new ProbeLayout(probes)));
 
 		assertThat(result.getMiraniumProduction()).isEqualTo(4650);
 		assertThat(result.getStorage()).isEqualTo(12000);
@@ -94,7 +95,7 @@ class FrontierNavResultTest {
 				FN_5, BoosterProbe.G2
 		);
 
-		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, probes));
+		FrontierNavResult result = FrontierNavResult.compute(new FrontierNav(MIRA, new ProbeLayout(probes)));
 
 		assertThat(result.getMiraniumProduction()).isEqualTo(9850);
 		assertThat(result.getStorage()).isEqualTo(6000);

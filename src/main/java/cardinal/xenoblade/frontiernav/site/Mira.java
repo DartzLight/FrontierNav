@@ -2,6 +2,7 @@ package cardinal.xenoblade.frontiernav.site;
 
 import cardinal.xenoblade.frontiernav.probe.BasicProbe;
 import cardinal.xenoblade.frontiernav.probe.Probe;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
@@ -38,14 +39,14 @@ public class Mira {
 		return siteByID.get(siteID);
 	}
 
-	public int computeChain(Site site, Map<Site, Probe> probes) {
-		Probe probe = probes.get(site);
+	public int computeChain(Site site, ProbeLayout probeLayout) {
+		Probe probe = probeLayout.getProbe(site);
 		if (probe == BasicProbe.DEFAULT) {
 			return 1;
 		}
 
 		Set<Site> sameProbe = sites.stream()
-				.filter(s -> probe.equals(probes.get(s)))
+				.filter(s -> probe.equals(probeLayout.getProbe(s)))
 				.collect(Collectors.toSet());
 		Graph<Site, DefaultEdge> subgraph = new AsSubgraph<>(graph, sameProbe);
 

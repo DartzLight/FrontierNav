@@ -30,7 +30,7 @@ class FrontierNavImporterTest {
 		FrontierNav frontierNav = FrontierNavImporter.importFrontierNav(mira, "101-1~102-2~103-3~104-4~105-5~106-6~107-7~108-8~109-9~110-10~111-11~112-12~113-13~114-14~115-15~116-16~117-17~118-18~119-19~120-20~121-21");
 
 		// Then
-		Map<Site, Probe> probes = frontierNav.getProbes();
+		Map<Site, Probe> probes = frontierNav.getProbeLayout().probes();
 		assertThat(probes).isEqualTo(
 				Map.ofEntries(
 						Map.entry(SITES.get(101), BasicProbe.DEFAULT),

@@ -1,5 +1,6 @@
-package cardinal.xenoblade.frontiernav.probe;
+package cardinal.xenoblade.frontiernav.probe.layout;
 
+import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
@@ -10,17 +11,18 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ProbeLoader {
+public class ProbeLayoutLoader {
 
-	public static Map<Site, Probe> loadProbes(Path probesPath, Mira mira) throws IOException {
+	public static ProbeLayout loadProbes(Path probesPath, Mira mira) throws IOException {
 		record SiteProbe(Site site, Probe probe) {}
 		try (var lines = Files.lines(probesPath)) {
-			return lines.map(line -> line.split("\t"))
+			Map<Site, Probe> probes = lines.map(line -> line.split("\t"))
 					.map(cells -> new SiteProbe(
 							mira.getSite(cells[0].transform(Integer::parseInt)),
-							cells[1].transform(ProbeLoader::parseProbe)
+							cells[1].transform(ProbeLayoutLoader::parseProbe)
 					))
 					.collect(Collectors.toUnmodifiableMap(SiteProbe::site, SiteProbe::probe));
+			return new ProbeLayout(probes);
 		}
 	}
 

@@ -1,21 +1,19 @@
 package cardinal.xenoblade.frontiernav;
 
-import cardinal.xenoblade.frontiernav.probe.Probe;
-import cardinal.xenoblade.frontiernav.probe.ProbeLoader;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayoutLoader;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraLoader;
-import cardinal.xenoblade.frontiernav.site.Site;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Map;
 
 public class FrontierNavLoader {
 
 	public static FrontierNav loadFrontierNav(Path sitesPath, Path networkPath, Path probesPath) throws IOException {
 		Mira mira = MiraLoader.loadMira(sitesPath, networkPath);
-		Map<Site, Probe> probes = ProbeLoader.loadProbes(probesPath, mira);
-		return new FrontierNav(mira, probes);
+		ProbeLayout probeLayout = ProbeLayoutLoader.loadProbes(probesPath, mira);
+		return new FrontierNav(mira, probeLayout);
 	}
 
 	static void main() throws IOException {
