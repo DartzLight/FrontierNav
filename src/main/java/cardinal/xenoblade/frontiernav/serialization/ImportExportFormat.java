@@ -1,4 +1,4 @@
-package cardinal.xenoblade.frontiernav.exporter;
+package cardinal.xenoblade.frontiernav.serialization;
 
 import cardinal.xenoblade.frontiernav.probe.*;
 
@@ -35,8 +35,8 @@ class ImportExportFormat {
 			new ProbeEntry(DuplicatorProbe.DEFAULT, 20),
 			new ProbeEntry(StorageProbe.DEFAULT, 21)
 	);
-	static final Map<? extends Probe, Integer> PROBE_TO_ID_MAP = PROBES.stream().collect(Collectors.toUnmodifiableMap(ProbeEntry::probe, ProbeEntry::identifier));
-	static final Map<Integer, ? extends Probe> ID_TO_PROBE_MAP = PROBES.stream().collect(Collectors.toUnmodifiableMap(ProbeEntry::identifier, ProbeEntry::probe));
+	static final Map<Probe, Integer> PROBE_TO_ID_MAP = PROBES.stream().collect(Collectors.toUnmodifiableMap(ProbeEntry::probe, ProbeEntry::identifier));
+	static final Map<Integer, Probe> ID_TO_PROBE_MAP = PROBES.stream().collect(Collectors.toUnmodifiableMap(ProbeEntry::identifier, ProbeEntry::probe));
 
 	private ImportExportFormat() {
 	}

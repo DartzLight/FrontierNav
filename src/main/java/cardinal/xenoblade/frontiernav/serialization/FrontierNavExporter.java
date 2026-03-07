@@ -1,4 +1,4 @@
-package cardinal.xenoblade.frontiernav.exporter;
+package cardinal.xenoblade.frontiernav.serialization;
 
 import cardinal.xenoblade.frontiernav.FrontierNav;
 import cardinal.xenoblade.frontiernav.FrontierNavLoader;
