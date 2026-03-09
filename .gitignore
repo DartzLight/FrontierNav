@@ -6,3 +6,4 @@ target/
 input/network.tsv
 input/probes.tsv
 input/sites.tsv
+input/inventory.tsv
