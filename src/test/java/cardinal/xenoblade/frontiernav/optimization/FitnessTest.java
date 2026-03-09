@@ -7,7 +7,7 @@ import java.util.function.IntSupplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FitnessCalculatorTest {
+class FitnessTest {
 
 	@ParameterizedTest
 	@CsvSource({
@@ -15,10 +15,10 @@ class FitnessCalculatorTest {
 			"55000, 0.3, 360000, 0.7, 268500.0",
 			"75000, 0.75, 350000, 0.25, 143750.0",
 	})
-	void testCompute(int miraniumValue, double miraniumCoef, int revenueValue, double revenueCoef, double expected) {
+	void should_compute_fitness(int miraniumValue, double miraniumCoef, int revenueValue, double revenueCoef, double expected) {
 		IntSupplier miraniumSupplier = () -> miraniumValue;
 		IntSupplier revenueSupplier = () -> revenueValue;
-		double result = FitnessCalculator.compute(miraniumSupplier, miraniumCoef, revenueSupplier, revenueCoef);
+		double result = Fitness.compute(miraniumSupplier, miraniumCoef, revenueSupplier, revenueCoef);
 		assertEquals(expected, result);
 	}
 

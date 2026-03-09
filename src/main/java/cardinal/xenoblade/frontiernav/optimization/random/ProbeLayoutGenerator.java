@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class RandomProbeLayoutGenerator {
+public class ProbeLayoutGenerator {
 	private final Mira mira;
 	private final Inventory inventory;
 	private final Random random;
 
-	public RandomProbeLayoutGenerator(Mira mira, Inventory inventory, Random random) {
+	public ProbeLayoutGenerator(Mira mira, Inventory inventory, Random random) {
 		this.mira = mira;
 		this.inventory = inventory;
 		this.random = random;

@@ -15,7 +15,7 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RandomProbeLayoutGeneratorTest {
+class ProbeLayoutGeneratorTest {
 
 	@Test
 	void should_generate_random_frontier_nav() {
@@ -27,7 +27,7 @@ class RandomProbeLayoutGeneratorTest {
 				BoosterProbe.G1, BoosterProbe.G2,
 				DuplicatorProbe.DEFAULT));
 		Random random = new Random(777);
-		RandomProbeLayoutGenerator generator = new RandomProbeLayoutGenerator(mira, inventory, random);
+		ProbeLayoutGenerator generator = new ProbeLayoutGenerator(mira, inventory, random);
 
 		ProbeLayout probeLayout = generator.generateRandom();
 		FrontierNavResult result = FrontierNavResult.compute(mira, probeLayout);

@@ -10,19 +10,22 @@ import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Mira {
 	private final SimpleGraph<Site, DefaultEdge> graph;
-	private final Set<Site> sites;
+	private final SequencedSet<Site> sites;
 	private final Map<Integer, Site> siteByID;
 
 	private Mira(SimpleGraph<Site, DefaultEdge> graph) {
+		LinkedHashSet<Site> sortedSites = graph.vertexSet()
+				.stream()
+				.sorted(Comparator.comparing(Site::id))
+				.collect(Collectors.toCollection(LinkedHashSet::new));
 		this.graph = graph;
-		this.sites = Set.copyOf(graph.vertexSet());
+		this.sites = Collections.unmodifiableSequencedSet(sortedSites);
 		this.siteByID = sites.stream()
 				.collect(Collectors.toUnmodifiableMap(Site::id, Function.identity()));
 	}
@@ -31,7 +34,7 @@ public class Mira {
 		return new Builder();
 	}
 
-	public Set<Site> getSites() {
+	public SequencedSet<Site> getSites() {
 		return sites;
 	}
 

@@ -22,4 +22,21 @@ public class MutableInventory {
 		}
 		return probes.remove(random.nextInt(probes.size()));
 	}
+
+	public Probe swapRandomProbe(Probe probeToSwap, Random random) {
+		if (probes.isEmpty()) {
+			return probeToSwap;
+		}
+		Probe swappedProbe = takeRandomProbe(random);
+		probes.add(probeToSwap);
+		return swappedProbe;
+	}
+
+	public void removeProbe(Probe probe) {
+		boolean removed = probes.remove(probe);
+		if (!removed) {
+			throw new IllegalStateException("Probe not found: " + probe);
+		}
+	}
+
 }
