@@ -18,7 +18,7 @@ public class FrontierNavLoader {
 
 	static void main() throws IOException {
 		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(Path.of("input/sites.tsv"), Path.of("input/network.tsv"), Path.of("input/probes.tsv"));
-		FrontierNavResult result = FrontierNavResult.compute(frontierNav);
+		FrontierNavResult result = FrontierNavResult.compute(frontierNav.getMira(), frontierNav.getProbeLayout());
 		System.out.println(result);
 	}
 }

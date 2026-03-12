@@ -18,6 +18,14 @@ public class FrontierNavResult {
 		this.storage = storage;
 	}
 
+	public Mira getMira() {
+		return mira;
+	}
+
+	public ProbeLayout getProbeLayout() {
+		return probeLayout;
+	}
+
 	public int getMiraniumProduction() {
 		return miranium;
 	}
@@ -47,12 +55,4 @@ public class FrontierNavResult {
 		return new FrontierNavResult(mira, probeLayout, miranium, revenue, storage);
 	}
 
-	public static FrontierNavResult compute(FrontierNav frontierNav) {
-		Mira mira = frontierNav.getMira();
-		ProbeLayout probeLayout = frontierNav.getProbeLayout();
-		int miranium = frontierNav.getMiranium();
-		int revenue = frontierNav.getRevenue();
-		int storage = frontierNav.getStorage();
-		return new FrontierNavResult(mira, probeLayout, miranium, revenue, storage);
-	}
 }

@@ -21,10 +21,6 @@ public class FrontierNavExporter {
 	private FrontierNavExporter() {
 	}
 
-	public static String exportToString(FrontierNav frontierNav) {
-		return exportToString(frontierNav.getMira(), frontierNav.getProbeLayout());
-	}
-
 	public static String exportToString(Mira mira, ProbeLayout probeLayout) {
 		TreeMap<Integer, Integer> export = new TreeMap<>();
 		fillValues(export, probeLayout);
@@ -67,7 +63,7 @@ public class FrontierNavExporter {
 
 	static void main() throws IOException {
 		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(Path.of("input/sites.tsv"), Path.of("input/network.tsv"), Path.of("input/probes.tsv"));
-		System.out.println(exportToString(frontierNav));
+		System.out.println(exportToString(frontierNav.getMira(), frontierNav.getProbeLayout()));
 	}
 
 }
