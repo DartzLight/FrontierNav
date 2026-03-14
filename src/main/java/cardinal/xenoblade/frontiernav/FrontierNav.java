@@ -5,10 +5,13 @@ import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.Site;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
+
+import static java.util.function.Predicate.not;
 
 public class FrontierNav {
 	private static final int DEFAULT_MIRANIUM_STORAGE = 6000;
@@ -29,8 +32,20 @@ public class FrontierNav {
 		return probeLayout;
 	}
 
-	private Probe getProbe(Site site) {
+	private Probe getRealProbe(Site site) {
 		return probeLayout.getProbe(site);
+	}
+
+	private List<Probe> getEffectiveProbes(Site site) {
+		Probe probe = getRealProbe(site);
+		if (probe instanceof DuplicatorProbe) {
+			return mira.getConnectedSites(site)
+					.stream()
+					.map(this::getRealProbe)
+					.filter(not(DuplicatorProbe.class::isInstance))
+					.toList();
+		}
+		return List.of(probe);
 	}
 
 	public int getMiranium() {
@@ -92,36 +107,19 @@ public class FrontierNav {
 
 	private int compute(Site site, ToIntFunction<Site> siteValueRetriever, ToIntFunction<Probe> probeMultiplierRetriever, ToIntBiFunction<Probe, Site> bonusValueRetriever, Class<? extends Probe> multipliableProbeType) {
 		int siteValue = siteValueRetriever.applyAsInt(site);
-		Probe probe = getProbe(site);
-		if (probe instanceof DuplicatorProbe) {
-			Set<Site> connectedSites = mira.getConnectedSites(site);
-			return computeDuplicator(site, connectedSites, _ -> siteValue, probeMultiplierRetriever, multipliableProbeType)
-					+ computeDuplicator(site, connectedSites, connected -> bonusValueRetriever.applyAsInt(getProbe(connected), site), _ -> 100, multipliableProbeType);
-		}
+		List<Probe> probes = getEffectiveProbes(site);
+		return probes.stream()
+				.mapToInt(probe -> computeEffective(site, probe, siteValue, probeMultiplierRetriever, bonusValueRetriever, multipliableProbeType))
+				.sum();
+	}
+
+	private int computeEffective(Site site, Probe probe, int siteValue, ToIntFunction<Probe> probeMultiplierRetriever, ToIntBiFunction<Probe, Site> bonusValueRetriever, Class<? extends Probe> multipliableProbeType) {
 		int siteMultiplier = probeMultiplierRetriever.applyAsInt(probe);
 		int bonus = bonusValueRetriever.applyAsInt(probe, site);
 		int boostMultiplier = computeBoostMultiplier(site, probe, multipliableProbeType);
 		int chainMultiplier = computeChainMultiplier(site, probe, multipliableProbeType);
 		return applyMultipliers(siteValue, siteMultiplier, chainMultiplier, boostMultiplier)
 				+ applyMultipliers(bonus, chainMultiplier, boostMultiplier);
-	}
-
-	private int computeDuplicator(Site site, Set<Site> connectedSites, ToIntFunction<Site> valueRetriever, ToIntFunction<Probe> siteMultiplierRetriever, Class<? extends Probe> multipliableProbeType) {
-		return connectedSites.stream()
-				.mapToInt(connected -> computeDuplicator(site, connected, valueRetriever, siteMultiplierRetriever, multipliableProbeType))
-				.sum();
-	}
-
-	private int computeDuplicator(Site originSite, Site connectedSite, ToIntFunction<Site> valueRetriever, ToIntFunction<Probe> siteMultiplierRetriever, Class<? extends Probe> multipliableProbeType) {
-		Probe probe = getProbe(connectedSite);
-		if (probe instanceof DuplicatorProbe) {
-			return 0;
-		}
-		int value = valueRetriever.applyAsInt(connectedSite);
-		int siteMultiplier = siteMultiplierRetriever.applyAsInt(probe);
-		int boostMultiplier = computeBoostMultiplier(originSite, probe, multipliableProbeType);
-		int chainMultiplier = computeChainMultiplier(originSite, probe, multipliableProbeType);
-		return applyMultipliers(value, siteMultiplier, boostMultiplier, chainMultiplier);
 	}
 
 	private int computeChainMultiplier(Site site, Probe probe, Class<? extends Probe> multipliableProbeType) {
@@ -164,15 +162,10 @@ public class FrontierNav {
 	}
 
 	private int computeOutgoingBoostMultiplier(Site site) {
-		Probe probe = getProbe(site);
-		if (probe instanceof DuplicatorProbe) {
-			Set<Site> connectedSites = mira.getConnectedSites(site);
-			return connectedSites.stream()
-					.filter(connected -> !(getProbe(connected) instanceof DuplicatorProbe))
-					.mapToInt(this::computeOutgoingBoostMultiplier)
-					.reduce(100, FrontierNav::applyMultiplier);
-		}
-		return probe.getBoostMultiplier();
+		List<Probe> probes = getEffectiveProbes(site);
+		return probes.stream()
+				.mapToInt(Probe::getBoostMultiplier)
+				.reduce(100, FrontierNav::applyMultiplier);
 	}
 
 	private boolean canHaveMultiplier(Probe probe, Class<? extends Probe> multipliableProbeType) {
