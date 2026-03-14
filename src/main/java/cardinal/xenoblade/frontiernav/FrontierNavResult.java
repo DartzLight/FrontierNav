@@ -49,9 +49,9 @@ public class FrontierNavResult {
 
 	public static FrontierNavResult compute(Mira mira, ProbeLayout probeLayout) {
 		FrontierNav frontierNav = new FrontierNav(mira, probeLayout);
-		int miranium = frontierNav.getMiranium();
-		int revenue = frontierNav.getRevenue();
-		int storage = frontierNav.getStorage();
+		int miranium = frontierNav.computeMiranium();
+		int revenue = frontierNav.computeRevenue();
+		int storage = frontierNav.computeStorage();
 		return new FrontierNavResult(mira, probeLayout, miranium, revenue, storage);
 	}
 

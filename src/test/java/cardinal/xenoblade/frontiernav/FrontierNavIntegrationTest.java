@@ -33,26 +33,26 @@ class FrontierNavIntegrationTest {
 		probes.put(mira.getSite(116), MiningProbe.G1);
 		probes.put(mira.getSite(117), ResearchProbe.G1);
 		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(probes));
-		assertThat(frontierNav.getMiranium()).isEqualTo(1775);
-		assertThat(frontierNav.getRevenue()).isEqualTo(3185);
-		assertThat(frontierNav.getStorage()).isEqualTo(6000);
+		assertThat(frontierNav.computeMiranium()).isEqualTo(1775);
+		assertThat(frontierNav.computeRevenue()).isEqualTo(3185);
+		assertThat(frontierNav.computeStorage()).isEqualTo(6000);
 	}
 
 	@Test
 	void check_all_basic_probes() throws IOException {
 		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH);
 		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(Map.of()));
-		assertThat(frontierNav.getMiranium()).isEqualTo(16550);
-		assertThat(frontierNav.getRevenue()).isEqualTo(27675);
-		assertThat(frontierNav.getStorage()).isEqualTo(6000);
+		assertThat(frontierNav.computeMiranium()).isEqualTo(16550);
+		assertThat(frontierNav.computeRevenue()).isEqualTo(27675);
+		assertThat(frontierNav.computeStorage()).isEqualTo(6000);
 	}
 
 	@Test
 	void check_all_custom_probes() throws IOException {
 		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(SITES_PATH, NETWORK_PATH, PROBES_PATH);
-		assertThat(frontierNav.getMiranium()).isEqualTo(61166);
-		assertThat(frontierNav.getRevenue()).isEqualTo(213025);
-		assertThat(frontierNav.getStorage()).isEqualTo(72300);
+		assertThat(frontierNav.computeMiranium()).isEqualTo(61166);
+		assertThat(frontierNav.computeRevenue()).isEqualTo(213025);
+		assertThat(frontierNav.computeStorage()).isEqualTo(72300);
 	}
 
 	@Test
@@ -66,9 +66,9 @@ class FrontierNavIntegrationTest {
 				mira.getSite(118), BoosterProbe.G1
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(probes));
-		assertThat(frontierNav.getMiranium()).isEqualTo(16575);
-		assertThat(frontierNav.getRevenue()).isEqualTo(33535);
-		assertThat(frontierNav.getStorage()).isEqualTo(6000);
+		assertThat(frontierNav.computeMiranium()).isEqualTo(16575);
+		assertThat(frontierNav.computeRevenue()).isEqualTo(33535);
+		assertThat(frontierNav.computeStorage()).isEqualTo(6000);
 	}
 
 	@Test
@@ -81,9 +81,9 @@ class FrontierNavIntegrationTest {
 				mira.getSite(211), StorageProbe.DEFAULT
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(probes));
-		assertThat(frontierNav.getMiranium()).isEqualTo(19250);
-		assertThat(frontierNav.getRevenue()).isEqualTo(33150);
-		assertThat(frontierNav.getStorage()).isEqualTo(12000);
+		assertThat(frontierNav.computeMiranium()).isEqualTo(19250);
+		assertThat(frontierNav.computeRevenue()).isEqualTo(33150);
+		assertThat(frontierNav.computeStorage()).isEqualTo(12000);
 	}
 
 	@Test
@@ -97,9 +97,9 @@ class FrontierNavIntegrationTest {
 				mira.getSite(212), BoosterProbe.G1
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(probes));
-		assertThat(frontierNav.getMiranium()).isEqualTo(20410);
-		assertThat(frontierNav.getRevenue()).isEqualTo(35734);
-		assertThat(frontierNav.getStorage()).isEqualTo(15000);
+		assertThat(frontierNav.computeMiranium()).isEqualTo(20410);
+		assertThat(frontierNav.computeRevenue()).isEqualTo(35734);
+		assertThat(frontierNav.computeStorage()).isEqualTo(15000);
 	}
 
 	@Test
@@ -113,9 +113,9 @@ class FrontierNavIntegrationTest {
 				mira.getSite(212), BoosterProbe.G1
 		);
 		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(probes));
-		assertThat(frontierNav.getMiranium()).isEqualTo(24910);
-		assertThat(frontierNav.getRevenue()).isEqualTo(27215);
-		assertThat(frontierNav.getStorage()).isEqualTo(6000);
+		assertThat(frontierNav.computeMiranium()).isEqualTo(24910);
+		assertThat(frontierNav.computeRevenue()).isEqualTo(27215);
+		assertThat(frontierNav.computeStorage()).isEqualTo(6000);
 	}
 
 }

@@ -32,9 +32,9 @@ class FrontierNavLoaderTest {
 		Mira mira = buildMira();
 		Map<Site, Probe> probes = buildProbes(mira);
 		FrontierNav expected = new FrontierNav(mira, new ProbeLayout(probes));
-		assertThat(frontierNav.getMiranium()).isEqualTo(expected.getMiranium());
-		assertThat(frontierNav.getRevenue()).isEqualTo(expected.getRevenue());
-		assertThat(frontierNav.getStorage()).isEqualTo(expected.getStorage());
+		assertThat(frontierNav.computeMiranium()).isEqualTo(expected.computeMiranium());
+		assertThat(frontierNav.computeRevenue()).isEqualTo(expected.computeRevenue());
+		assertThat(frontierNav.computeStorage()).isEqualTo(expected.computeStorage());
 	}
 
 	private static Mira buildMira() {

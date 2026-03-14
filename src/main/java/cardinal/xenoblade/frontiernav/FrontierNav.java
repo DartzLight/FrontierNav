@@ -48,36 +48,36 @@ public class FrontierNav {
 		return List.of(probe);
 	}
 
-	public int getMiranium() {
+	public int computeMiranium() {
 		return mira.getSites()
 				.stream()
 				.mapToInt(this::computeMiranium)
 				.sum();
 	}
 
-	public int getRevenue() {
+	public int computeRevenue() {
 		return mira.getSites()
 				.stream()
 				.mapToInt(this::computeRevenue)
 				.sum();
 	}
 
-	public int getStorage() {
+	public int computeStorage() {
 		return mira.getSites()
 				.stream()
 				.mapToInt(this::computeStorage)
 				.sum() + DEFAULT_MIRANIUM_STORAGE;
 	}
 
-	private int computeMiranium(Site site) {
+	public int computeMiranium(Site site) {
 		return compute(site, FrontierNav::getBaseMiranium, FrontierNav::getMiraniumMultiplier, (_, _) -> 0, MiningProbe.class);
 	}
 
-	private int computeRevenue(Site site) {
+	public int computeRevenue(Site site) {
 		return compute(site, FrontierNav::getBaseRevenue, FrontierNav::getRevenueMultiplier, FrontierNav::getRevenueBonus, ResearchProbe.class);
 	}
 
-	private int computeStorage(Site site) {
+	public int computeStorage(Site site) {
 		return compute(site, _ -> 0, _ -> 0, (probe, _) -> getMiraniumStorage(probe), StorageProbe.class);
 	}
 
@@ -129,7 +129,7 @@ public class FrontierNav {
 		return 100;
 	}
 
-	private int computeChainMultiplier(Site site) {
+	public int computeChainMultiplier(Site site) {
 		int chain = mira.computeChain(site, probeLayout);
 		return getChainMultiplier(chain);
 	}
@@ -154,18 +154,23 @@ public class FrontierNav {
 		return 100;
 	}
 
-	private int computeIncomingBoostMultiplier(Site site) {
+	public int computeIncomingBoostMultiplier(Site site) {
 		Set<Site> connectedSites = mira.getConnectedSites(site);
 		return connectedSites.stream()
 				.mapToInt(this::computeOutgoingBoostMultiplier)
 				.reduce(100, FrontierNav::applyMultiplier);
 	}
 
-	private int computeOutgoingBoostMultiplier(Site site) {
+	public int computeOutgoingBoostMultiplier(Site site) {
 		List<Probe> probes = getEffectiveProbes(site);
-		return probes.stream()
+		int boostMultiplier = probes.stream()
 				.mapToInt(Probe::getBoostMultiplier)
 				.reduce(100, FrontierNav::applyMultiplier);
+		if (boostMultiplier > 100) {
+			int chainMultiplier = computeChainMultiplier(site);
+			return applyMultiplier(chainMultiplier, boostMultiplier);
+		}
+		return boostMultiplier;
 	}
 
 	private boolean canHaveMultiplier(Probe probe, Class<? extends Probe> multipliableProbeType) {
