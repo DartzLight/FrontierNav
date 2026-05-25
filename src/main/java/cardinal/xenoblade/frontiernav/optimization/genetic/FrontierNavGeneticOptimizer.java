@@ -5,13 +5,17 @@ import cardinal.xenoblade.frontiernav.inventory.Inventory;
 import cardinal.xenoblade.frontiernav.inventory.InventoryLoader;
 import cardinal.xenoblade.frontiernav.optimization.Fitness;
 import cardinal.xenoblade.frontiernav.optimization.random.ProbeLayoutGenerator;
+import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.serialization.FrontierNavExporter;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraLoader;
+import cardinal.xenoblade.frontiernav.site.Site;
 import cardinal.xenoblade.frontiernav.utils.FileHelper;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Random;
 
 public class FrontierNavGeneticOptimizer {
@@ -38,8 +42,15 @@ public class FrontierNavGeneticOptimizer {
 		GeneticParameters parameters = GeneticParametersLoader.load(geneticParametersPath);
 
 		FrontierNavResult best = searchBestFrontierNav(mira, inventory, random, parameters);
+
+		ProbeLayout layout = best.getProbeLayout();
+		layout.probes()
+				.entrySet()
+				.stream()
+				.sorted(Map.Entry.comparingByKey(Comparator.comparingInt(Site::id)))
+				.forEachOrdered(entry -> System.out.println(entry.getKey() + " -> " + entry.getValue()));
 		System.out.println(best);
-		System.out.println(FrontierNavExporter.exportToString(mira, best.getProbeLayout()));
+		System.out.println(FrontierNavExporter.exportToString(mira, layout));
 	}
 
 }

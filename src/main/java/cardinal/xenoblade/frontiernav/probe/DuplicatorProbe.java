@@ -27,4 +27,9 @@ public enum DuplicatorProbe implements Probe {
 	public int getBoostMultiplier() {
 		throw new UnsupportedOperationException("Duplicator probe does not have its own boost multiplier");
 	}
+
+	@Override
+	public String toString() {
+		return "Duplicator";
+	}
 }

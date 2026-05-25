@@ -40,4 +40,9 @@ public enum ResearchProbe implements Probe {
 	public int getBoostMultiplier() {
 		return 100;
 	}
+
+	@Override
+	public String toString() {
+		return "Research " + name();
+	}
 }

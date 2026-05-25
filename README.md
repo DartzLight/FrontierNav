@@ -34,11 +34,14 @@ You can copy the `.tsv` files from `input/default/` to `input/` directory, and t
 - modify the `inventory.tsv` file to match your probes inventory in game
 - you can leave the `network.tsv` file as-is (the sites not in `sites.tsv` will be ignored)
 - you can also modify the `genetic.properties` file to fine-tune the algorithm
+    - especially the `miraniumCoef` and `revenueCoef` parameters, representing the ratio of miranium/revenue you want to maximize
 
 ### Running the Optimizer
 
 Program will display the progression in the console.
-At the end, the best found layout will be printed to the console.
+
+At the end, the best found layout will be printed to the console at the [frontiernav.net](https://frontiernav.net/wiki/xenoblade-chronicles-x/visualisations/maps/probe-guides) format (see [Probe codes](#probe-codes)).  
+You can visualize it by copy/pasting the result at the end of this URL : https://frontiernav.net/wiki/xenoblade-chronicles-x/visualisations/maps/probe-guides/FN?map=
 
 #### Via Docker (recommended)
 
@@ -61,3 +64,32 @@ Run the generated JAR:
 ```
 java -jar target/frontiernav.jar
 ```
+
+### Probe codes
+
+List of probes and their respective codes in `inventory.tsv` and in frontiernav.net (console output):
+
+| Probe                          | `inventory.tsv` code                             | frontiernav.net code |
+|--------------------------------|--------------------------------------------------|----------------------|
+| (site not unlocked / no probe) | (empty line with site **absent** in `sites.tsv`) | 0                    | 
+| Basic                          | (empty line with site **present** in `site.tsv`) | 1                    |
+| Mining G1                      | M1                                               | 2                    |
+| Mining G2                      | M2                                               | 3                    |
+| Mining G3                      | M3                                               | 4                    |
+| Mining G4                      | M4                                               | 5                    |
+| Mining G5                      | M5                                               | 6                    |
+| Mining G6                      | M6                                               | 7                    |
+| Mining G7                      | M7                                               | 8                    |
+| Mining G8                      | M8                                               | 9                    |
+| Mining G9                      | M9                                               | 10                   |
+| Mining G10                     | M10                                              | 11                   |
+| Research G1                    | R1                                               | 12                   |
+| Research G2                    | R2                                               | 13                   |
+| Research G3                    | R3                                               | 14                   |
+| Research G4                    | R4                                               | 15                   |
+| Research G5                    | R5                                               | 16                   |
+| Research G6                    | R6                                               | 17                   |
+| Booster G1                     | B1                                               | 18                   |
+| Booster G2                     | B2                                               | 19                   |
+| Duplicator                     | D                                                | 20                   |
+| Storage                        | S                                                | 21                   |

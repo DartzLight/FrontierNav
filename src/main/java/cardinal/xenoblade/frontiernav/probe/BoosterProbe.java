@@ -34,4 +34,9 @@ public enum BoosterProbe implements Probe {
 	public int getBoostMultiplier() {
 		return boostMultiplier;
 	}
+
+	@Override
+	public String toString() {
+		return "Booster " + name();
+	}
 }

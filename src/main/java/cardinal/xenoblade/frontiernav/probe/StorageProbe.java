@@ -28,4 +28,8 @@ public enum StorageProbe implements Probe {
 		return 100;
 	}
 
+	@Override
+	public String toString() {
+		return "Storage";
+	}
 }

@@ -42,4 +42,9 @@ public enum MiningProbe implements Probe {
 	public int getBoostMultiplier() {
 		return 100;
 	}
+
+	@Override
+	public String toString() {
+		return "Mining " + name();
+	}
 }
