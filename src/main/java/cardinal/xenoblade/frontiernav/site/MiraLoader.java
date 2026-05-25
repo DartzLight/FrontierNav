@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MiraLoader {
 	private MiraLoader() {
@@ -47,10 +48,14 @@ public class MiraLoader {
 	private static List<SiteConnection> loadNetwork(Path networkPath, Map<Integer, Site> sites) throws IOException {
 		try (var lines = Files.lines(networkPath)) {
 			return lines.map(line -> line.split("\t"))
-					.map(cells -> new SiteConnection(
-							sites.get(cells[0].transform(Integer::parseInt)),
-							sites.get(cells[1].transform(Integer::parseInt))
-					))
+					.flatMap(cells -> {
+						Site site1 = sites.get(cells[0].transform(Integer::parseInt));
+						Site site2 = sites.get(cells[1].transform(Integer::parseInt));
+						if (site1 == null || site2 == null) {
+							return Stream.empty();
+						}
+						return Stream.of(new SiteConnection(site1, site2));
+					})
 					.toList();
 		}
 	}
