@@ -20,7 +20,6 @@ class GeneticAlgorithmTest {
 	void should_validate_algorithm() {
 		Mira mira = Mockito.mock(Mira.class);
 		Inventory inventory = Mockito.mock(Inventory.class);
-		Fitness fitness = Fitness.of(0.0, 0.0);
 		Random random = new Random(1);
 		Selection selection = Mockito.spy(new DummySelection());
 		Crossover crossover = Mockito.spy(new DummyCrossover());
@@ -29,6 +28,9 @@ class GeneticAlgorithmTest {
 
 		when(probeLayoutGenerator.generateRandom()).thenReturn(Mockito.mock(ProbeLayout.class));
 
+		double miraniumCoef = 0.0;
+		double revenueCoef = 0.0;
+		Fitness fitness = Fitness.of(miraniumCoef, revenueCoef);
 		int iterations = 150;
 		int initialPopulationSize = 100;
 		int selectionByElitismCount = 1;
@@ -40,7 +42,7 @@ class GeneticAlgorithmTest {
 		double mutationSwapRate = 0.1;
 		double mutationReplaceRate = 0.1;
 		int randomInjectionCount = 30;
-		GeneticParameters parameters = new GeneticParameters(iterations, initialPopulationSize, selectionByElitismCount, selectedByTournamentCount, tournamentSize, crossoverOnSelectionCount, crossoverOnRandomCount, mutationCount, mutationSwapRate, mutationReplaceRate, randomInjectionCount);
+		GeneticParameters parameters = new GeneticParameters(miraniumCoef, revenueCoef, iterations, initialPopulationSize, selectionByElitismCount, selectedByTournamentCount, tournamentSize, crossoverOnSelectionCount, crossoverOnRandomCount, mutationCount, mutationSwapRate, mutationReplaceRate, randomInjectionCount);
 
 		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(mira, inventory, fitness, random, parameters, selection, crossover, mutation, probeLayoutGenerator);
 

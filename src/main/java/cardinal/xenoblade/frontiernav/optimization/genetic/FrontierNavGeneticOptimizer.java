@@ -15,7 +15,8 @@ import java.util.Random;
 
 public class FrontierNavGeneticOptimizer {
 
-	public static FrontierNavResult searchBestFrontierNav(Mira mira, Inventory inventory, Random random, Fitness fitness, GeneticParameters parameters) {
+	public static FrontierNavResult searchBestFrontierNav(Mira mira, Inventory inventory, Random random, GeneticParameters parameters) {
+		Fitness fitness = Fitness.of(parameters.miraniumCoef(), parameters.revenueCoef());
 		GeneticSelection selection = new GeneticSelection(random, fitness);
 		GeneticCrossover crossover = new GeneticCrossover(random);
 		GeneticMutation mutation = new GeneticMutation(random, parameters.mutationSwapRate(), parameters.mutationReplaceRate());
@@ -28,25 +29,9 @@ public class FrontierNavGeneticOptimizer {
 		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
 		Inventory inventory = InventoryLoader.loadInventory(Path.of("input/inventory.tsv"));
 		Random random = new Random();
+		GeneticParameters parameters = GeneticParametersLoader.load(Path.of("input/genetic.properties"));
 
-		double miraniumCoef = 6d;
-		double revenueCoef = 1d;
-		Fitness fitness = Fitness.of(miraniumCoef, revenueCoef);
-
-		int iterations = 10_000;
-		int initialPopulationSize = 100;
-		int selectionByElitismCount = 5;
-		int selectionByTournamentCount = 15;
-		int tournamentSize = 5;
-		int crossoverOnSelectionCount = 15;
-		int crossoverOnRandomCount = 15;
-		int mutationCount = 25;
-		double mutationSwapRate = 0.05;
-		double mutationReplaceRate = 0.05;
-		int randomInjectionCount = 25;
-		GeneticParameters parameters = new GeneticParameters(iterations, initialPopulationSize, selectionByElitismCount, selectionByTournamentCount, tournamentSize, crossoverOnSelectionCount, crossoverOnRandomCount, mutationCount, mutationSwapRate, mutationReplaceRate, randomInjectionCount);
-
-		FrontierNavResult best = searchBestFrontierNav(mira, inventory, random, fitness, parameters);
+		FrontierNavResult best = searchBestFrontierNav(mira, inventory, random, parameters);
 		System.out.println(best);
 		System.out.println(FrontierNavExporter.exportToString(mira, best.getProbeLayout()));
 	}
