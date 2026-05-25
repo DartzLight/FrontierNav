@@ -1,0 +1,16 @@
+FROM maven:3-eclipse-temurin-25 AS build
+WORKDIR /build
+
+COPY pom.xml .
+RUN mvn -B -q dependency:go-offline
+
+COPY src ./src
+RUN mvn -B -q -DskipTests package
+
+FROM eclipse-temurin:25-jre
+WORKDIR /app
+
+COPY --from=build /build/target/libs ./libs
+COPY --from=build /build/target/frontiernav.jar ./frontiernav.jar
+
+ENTRYPOINT ["java", "-jar", "/app/frontiernav.jar"]

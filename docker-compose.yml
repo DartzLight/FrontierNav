@@ -1,0 +1,6 @@
+services:
+  frontiernav:
+    build: .
+    image: frontiernav:latest
+    volumes:
+      - ./input:/app/input:ro
