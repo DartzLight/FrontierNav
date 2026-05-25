@@ -8,6 +8,7 @@ import cardinal.xenoblade.frontiernav.optimization.random.ProbeLayoutGenerator;
 import cardinal.xenoblade.frontiernav.serialization.FrontierNavExporter;
 import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.MiraLoader;
+import cardinal.xenoblade.frontiernav.utils.FileHelper;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,10 +27,15 @@ public class FrontierNavGeneticOptimizer {
 	}
 
 	static void main() throws IOException {
-		Mira mira = MiraLoader.loadMira(Path.of("input/sites.tsv"), Path.of("input/network.tsv"));
-		Inventory inventory = InventoryLoader.loadInventory(Path.of("input/inventory.tsv"));
+		Path sitesPath = FileHelper.findOrDefault(Path.of("input/sites.tsv"), Path.of("input/default/sites.tsv"));
+		Path networkPath = FileHelper.findOrDefault(Path.of("input/network.tsv"), Path.of("input/default/network.tsv"));
+		Path inventoryPath = FileHelper.findOrDefault(Path.of("input/inventory.tsv"), Path.of("input/default/inventory.tsv"));
+		Path geneticParametersPath = FileHelper.findOrDefault(Path.of("input/genetic.properties"), Path.of("input/default/genetic.properties"));
+
+		Mira mira = MiraLoader.loadMira(sitesPath, networkPath);
+		Inventory inventory = InventoryLoader.loadInventory(inventoryPath);
 		Random random = new Random();
-		GeneticParameters parameters = GeneticParametersLoader.load(Path.of("input/genetic.properties"));
+		GeneticParameters parameters = GeneticParametersLoader.load(geneticParametersPath);
 
 		FrontierNavResult best = searchBestFrontierNav(mira, inventory, random, parameters);
 		System.out.println(best);

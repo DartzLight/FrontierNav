@@ -25,7 +25,10 @@ Program use the following tab-separated-values files in the `input/` directory:
 | `network.tsv`        | Edges of the site network                  | pairs of `site id` connected in the graph                                                                             |
 | `genetic.properties` | Tuning parameters of the genetic algorithm | pairs of `key`=`value`                                                                                                |
 
-You can use the `.tsv` files from `input/default/` directory as a starting point, and then :
+If some `.tsv` files are not found in the `input/` directory, the program will use the default one in `input/default/`.  
+In other words : the `input/*.tsv` files override the `input/default/*.tsv` files.
+
+You can copy the `.tsv` files from `input/default/` to `input/` directory, and then :
 
 - modify the `sites.tsv` file to fit your progression on Mira (remove sites you have not already unlocked + change the number of unlocked sightseeing spots)
 - modify the `inventory.tsv` file to match your probes inventory in game
