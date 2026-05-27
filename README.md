@@ -8,7 +8,6 @@ It optimizes layouts to maximize metrics such as Miranium production and/or reve
 ### Prerequisites
 
 - **Java 25** or higher
-- **Maven**
 
 OR
 
@@ -53,16 +52,10 @@ docker-compose up --build
 
 #### Via Java/Maven
 
-Build the project:
+Run the JAR from latest GitHub release:
 
 ```
-mvn clean package
-```
-
-Run the generated JAR:
-
-```
-java -jar target/frontiernav.jar
+java -jar frontiernav.jar
 ```
 
 ### Probe codes
