@@ -39,10 +39,9 @@ public class FrontierNavRandomOptimizer {
 	static void main() throws IOException {
 		Path sitesPath = FileHelper.findOrDefault(Path.of("input/sites.tsv"), Path.of("input/default/sites.tsv"));
 		Path networkPath = FileHelper.findOrDefault(Path.of("input/network.tsv"), Path.of("input/default/network.tsv"));
-		Path preciousResourcesPath = FileHelper.findOrDefault(Path.of("input/resources.tsv"), Path.of("input/default/resources.tsv"));
 		Path inventoryPath = FileHelper.findOrDefault(Path.of("input/inventory.tsv"), Path.of("input/default/inventory.tsv"));
 
-		Mira mira = MiraLoader.loadMira(sitesPath, networkPath, preciousResourcesPath);
+		Mira mira = MiraLoader.loadMira(sitesPath, networkPath);
 		Inventory inventory = InventoryLoader.loadInventory(inventoryPath);
 		Random random = new Random();
 		double miraniumCoef = 6d;

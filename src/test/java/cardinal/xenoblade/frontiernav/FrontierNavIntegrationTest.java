@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FrontierNavIntegrationTest {
 	private static final Path SITES_PATH = ResourceHelper.getResourcePath("complete/sites.tsv");
 	private static final Path NETWORK_PATH = ResourceHelper.getResourcePath("complete/network.tsv");
-	private static final Path PRECIOUS_RESOURCES_PATH = ResourceHelper.getResourcePath("complete/resources.tsv");
 	private static final Path PROBES_PATH = ResourceHelper.getResourcePath("complete/probes.tsv");
 
 	@Test
@@ -41,7 +40,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_all_basic_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH, PRECIOUS_RESOURCES_PATH);
+		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH);
 		FrontierNav frontierNav = new FrontierNav(mira, new ProbeLayout(Map.of()));
 		assertThat(frontierNav.computeMiranium()).isEqualTo(16550);
 		assertThat(frontierNav.computeRevenue()).isEqualTo(27675);
@@ -50,7 +49,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_all_custom_probes() throws IOException {
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(SITES_PATH, NETWORK_PATH, PRECIOUS_RESOURCES_PATH, PROBES_PATH);
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(SITES_PATH, NETWORK_PATH, PROBES_PATH);
 		assertThat(frontierNav.computeMiranium()).isEqualTo(61166);
 		assertThat(frontierNav.computeRevenue()).isEqualTo(213025);
 		assertThat(frontierNav.computeStorage()).isEqualTo(72300);
@@ -58,7 +57,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_booster_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH, PRECIOUS_RESOURCES_PATH);
+		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH);
 		Map<Site, Probe> probes = Map.of(
 				mira.getSite(112), BoosterProbe.G2,
 				mira.getSite(114), MiningProbe.G1,
@@ -74,7 +73,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_duplicator_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH, PRECIOUS_RESOURCES_PATH);
+		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH);
 		Map<Site, Probe> probes = Map.of(
 				mira.getSite(204), DuplicatorProbe.DEFAULT,
 				mira.getSite(203), ResearchProbe.G6,
@@ -89,7 +88,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_duplicator_booster_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH, PRECIOUS_RESOURCES_PATH);
+		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH);
 		Map<Site, Probe> probes = Map.of(
 				mira.getSite(204), DuplicatorProbe.DEFAULT,
 				mira.getSite(203), ResearchProbe.G6,
@@ -105,7 +104,7 @@ class FrontierNavIntegrationTest {
 
 	@Test
 	void check_multiple_duplicator_booster_probes() throws IOException {
-		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH, PRECIOUS_RESOURCES_PATH);
+		Mira mira = MiraLoader.loadMira(SITES_PATH, NETWORK_PATH);
 		Map<Site, Probe> probes = Map.of(
 				mira.getSite(204), DuplicatorProbe.DEFAULT,
 				mira.getSite(203), BoosterProbe.G2,

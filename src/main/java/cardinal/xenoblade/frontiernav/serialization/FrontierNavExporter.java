@@ -62,7 +62,7 @@ public class FrontierNavExporter {
 	}
 
 	static void main() throws IOException {
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(Path.of("input/sites.tsv"), Path.of("input/network.tsv"), Path.of("input/resources.tsv"), Path.of("input/probes.tsv"));
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(Path.of("input/sites.tsv"), Path.of("input/network.tsv"), Path.of("input/probes.tsv"));
 		System.out.println(exportToString(frontierNav.getMira(), frontierNav.getProbeLayout()));
 	}
 
