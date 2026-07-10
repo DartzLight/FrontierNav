@@ -3,12 +3,15 @@ package cardinal.xenoblade.frontiernav;
 import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
+import cardinal.xenoblade.frontiernav.site.PreciousResource;
 import cardinal.xenoblade.frontiernav.site.Site;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.function.Predicate.not;
@@ -69,6 +72,13 @@ public class FrontierNav {
 				.sum() + DEFAULT_MIRANIUM_STORAGE;
 	}
 
+	public Map<PreciousResource, Long> computePreciousResources() {
+		return mira.getSites()
+				.stream()
+				.flatMap(site -> computePreciousResources(site).stream())
+				.collect(Collectors.groupingBy(x -> x, Collectors.counting()));
+	}
+
 	public int computeMiranium(Site site) {
 		return compute(site, FrontierNav::getBaseMiranium, FrontierNav::getMiraniumMultiplier, (_, _) -> 0, MiningProbe.class);
 	}
@@ -79,6 +89,14 @@ public class FrontierNav {
 
 	public int computeStorage(Site site) {
 		return compute(site, _ -> 0, _ -> 0, (probe, _) -> getMiraniumStorage(probe), StorageProbe.class);
+	}
+
+	public Set<PreciousResource> computePreciousResources(Site site) {
+		Probe probe = getRealProbe(site);
+		if (!(probe instanceof BasicProbe || probe instanceof MiningProbe)) {
+			return Set.of();
+		}
+		return site.preciousResources();
 	}
 
 	private static int getBaseMiranium(Site site) {
