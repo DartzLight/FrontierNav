@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -94,14 +93,14 @@ class FrontierNavTest {
 	}
 
 	@Test
-	void check_preciours_resources() {
+	void check_precious_resources() {
 		// Given
-		Site fn503 = new Site(503, MiraniumRank.C, RevenueRank.D, 0, Set.of(PreciousResource.ENDURON_LEAD));
-		Site fn504 = new Site(504, MiraniumRank.C, RevenueRank.C, 0, Set.of(PreciousResource.BONJELIUM, PreciousResource.ENDURON_LEAD, PreciousResource.ARC_SAND_ORE, PreciousResource.MARINE_RUTILE));
-		Site fn507 = new Site(507, MiraniumRank.C, RevenueRank.A, 0, Set.of(PreciousResource.BONJELIUM));
-		Site fn508 = new Site(508, MiraniumRank.A, RevenueRank.B, 0, Set.of(PreciousResource.ENDURON_LEAD, PreciousResource.MARINE_RUTILE));
+		Site fn503 = new Site(503, MiraniumRank.C, RevenueRank.D, 0, Map.of(PreciousResource.ENDURON_LEAD, 0.19d));
+		Site fn504 = new Site(504, MiraniumRank.C, RevenueRank.C, 0, Map.of(PreciousResource.BONJELIUM, 0.8d, PreciousResource.ENDURON_LEAD, 0.4d, PreciousResource.ARC_SAND_ORE, 0.32d, PreciousResource.MARINE_RUTILE, 0.76d));
+		Site fn507 = new Site(507, MiraniumRank.C, RevenueRank.A, 0, Map.of(PreciousResource.BONJELIUM, 0.2d));
+		Site fn508 = new Site(508, MiraniumRank.A, RevenueRank.B, 0, Map.of(PreciousResource.ENDURON_LEAD, 0.2d, PreciousResource.MARINE_RUTILE, 0.38d));
 		Site fn509 = new Site(509, MiraniumRank.A, RevenueRank.A, 0);
-		Site fn511 = new Site(511, MiraniumRank.A, RevenueRank.C, 0, Set.of(PreciousResource.BONJELIUM));
+		Site fn511 = new Site(511, MiraniumRank.A, RevenueRank.C, 0, Map.of(PreciousResource.BONJELIUM, 0.4d));
 		Mira mira = Mira.builder()
 				.addSite(fn503)
 				.addSite(fn504)
@@ -125,14 +124,14 @@ class FrontierNavTest {
 		));
 		FrontierNav frontierNav = new FrontierNav(mira, probeLayout);
 
-		assertThat(frontierNav.computePreciousResources(fn503)).isEqualTo(Set.of());
-		assertThat(frontierNav.computePreciousResources(fn504)).isEqualTo(Set.of());
-		assertThat(frontierNav.computePreciousResources(fn507)).isEqualTo(Set.of(PreciousResource.BONJELIUM));
-		assertThat(frontierNav.computePreciousResources(fn508)).isEqualTo(Set.of(PreciousResource.ENDURON_LEAD, PreciousResource.MARINE_RUTILE));
-		assertThat(frontierNav.computePreciousResources(fn509)).isEqualTo(Set.of());
-		assertThat(frontierNav.computePreciousResources(fn511)).isEqualTo(Set.of(PreciousResource.BONJELIUM));
+		assertThat(frontierNav.computePreciousResources(fn503)).isEqualTo(Map.of());
+		assertThat(frontierNav.computePreciousResources(fn504)).isEqualTo(Map.of());
+		assertThat(frontierNav.computePreciousResources(fn507)).isEqualTo(Map.of(PreciousResource.BONJELIUM, 0.2d));
+		assertThat(frontierNav.computePreciousResources(fn508)).isEqualTo(Map.of(PreciousResource.ENDURON_LEAD, 0.2d, PreciousResource.MARINE_RUTILE, 0.38d));
+		assertThat(frontierNav.computePreciousResources(fn509)).isEqualTo(Map.of());
+		assertThat(frontierNav.computePreciousResources(fn511)).isEqualTo(Map.of(PreciousResource.BONJELIUM, 0.4d));
 		assertThat(frontierNav.computePreciousResources())
-				.isEqualTo(Map.of(PreciousResource.BONJELIUM, 2L, PreciousResource.ENDURON_LEAD, 1L, PreciousResource.MARINE_RUTILE, 1L));
+				.isEqualTo(Map.of(PreciousResource.BONJELIUM, 0.2d + 0.4d, PreciousResource.ENDURON_LEAD, 0.2d, PreciousResource.MARINE_RUTILE, 0.38d));
 	}
 
 	@Test

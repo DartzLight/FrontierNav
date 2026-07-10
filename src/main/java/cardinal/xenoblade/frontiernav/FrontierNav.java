@@ -72,11 +72,11 @@ public class FrontierNav {
 				.sum() + DEFAULT_MIRANIUM_STORAGE;
 	}
 
-	public Map<PreciousResource, Long> computePreciousResources() {
+	public Map<PreciousResource, Double> computePreciousResources() {
 		return mira.getSites()
 				.stream()
-				.flatMap(site -> computePreciousResources(site).stream())
-				.collect(Collectors.groupingBy(x -> x, Collectors.counting()));
+				.flatMap(site -> computePreciousResources(site).entrySet().stream())
+				.collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingDouble(Map.Entry::getValue)));
 	}
 
 	public int computeMiranium(Site site) {
@@ -91,10 +91,10 @@ public class FrontierNav {
 		return compute(site, _ -> 0, _ -> 0, (probe, _) -> getMiraniumStorage(probe), StorageProbe.class);
 	}
 
-	public Set<PreciousResource> computePreciousResources(Site site) {
+	public Map<PreciousResource, Double> computePreciousResources(Site site) {
 		Probe probe = getRealProbe(site);
 		if (!(probe instanceof BasicProbe || probe instanceof MiningProbe)) {
-			return Set.of();
+			return Map.of();
 		}
 		return site.preciousResources();
 	}

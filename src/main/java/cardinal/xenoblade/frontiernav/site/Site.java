@@ -1,13 +1,13 @@
 package cardinal.xenoblade.frontiernav.site;
 
-import java.util.Set;
+import java.util.Map;
 
 public record Site(
 		int id,
 		MiraniumRank miraniumRank,
 		RevenueRank revenueRank,
 		int unexploredTerritories,
-		Set<PreciousResource> preciousResources
+		Map<PreciousResource, Double> preciousResources
 ) {
 
 	public Site(int id, MiraniumRank miraniumRank, RevenueRank revenueRank) {
@@ -15,7 +15,7 @@ public record Site(
 	}
 
 	public Site(int id, MiraniumRank miraniumRank, RevenueRank revenueRank, int unexploredTerritories) {
-		this(id, miraniumRank, revenueRank, unexploredTerritories, Set.of());
+		this(id, miraniumRank, revenueRank, unexploredTerritories, Map.of());
 	}
 
 }
