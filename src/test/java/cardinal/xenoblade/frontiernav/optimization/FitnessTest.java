@@ -1,11 +1,16 @@
 package cardinal.xenoblade.frontiernav.optimization;
 
+import cardinal.xenoblade.frontiernav.FrontierNavResult;
+import cardinal.xenoblade.frontiernav.site.PreciousResource;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
 
+import java.util.Map;
 import java.util.function.IntSupplier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class FitnessTest {
 
@@ -19,7 +24,48 @@ class FitnessTest {
 		IntSupplier miraniumSupplier = () -> miraniumValue;
 		IntSupplier revenueSupplier = () -> revenueValue;
 		double result = Fitness.compute(miraniumSupplier, miraniumCoef, revenueSupplier, revenueCoef);
-		assertEquals(expected, result);
+		assertThat(result).isEqualTo(expected);
+	}
+
+	@Test
+	void should_validate_fitness() {
+		FrontierNavResult result = Mockito.mock(FrontierNavResult.class);
+		Mockito.when(result.getEffectiveMiranium()).thenReturn(100_000);
+		Mockito.when(result.getRevenue()).thenReturn(300_000);
+		Mockito.when(result.getPreciousResources()).thenReturn(Map.of());
+		Fitness fitness = Fitness.of(2d, 1d);
+
+		double evaluate = fitness.evaluate(result);
+
+		assertThat(evaluate).isEqualTo(500000.0);
+	}
+
+	@Test
+	void should_validate_fitness_with_resources() {
+		FrontierNavResult result = Mockito.mock(FrontierNavResult.class);
+		Mockito.when(result.getEffectiveMiranium()).thenReturn(100_000);
+		Mockito.when(result.getRevenue()).thenReturn(300_000);
+		Map<PreciousResource, Double> preciousResources = Map.of(
+				PreciousResource.DAWNSTONE, 1d,
+				PreciousResource.CIMMERIAN_CINNABAR, 1d,
+				PreciousResource.OUROBOROS_CRYSTAL, 3d,
+				PreciousResource.PARHELION_PLATINUM, 5d,
+				PreciousResource.BONJELIUM, 4d,
+				PreciousResource.AURORITE, 10d
+		);
+		Mockito.when(result.getPreciousResources()).thenReturn(preciousResources);
+		Map<PreciousResource, Double> thresholds = Map.of(
+				PreciousResource.DAWNSTONE, 1d,
+				PreciousResource.CIMMERIAN_CINNABAR, 2d,
+				PreciousResource.OUROBOROS_CRYSTAL, 3d,
+				PreciousResource.PARHELION_PLATINUM, 4d,
+				PreciousResource.BONJELIUM, 5d
+		);
+		Fitness fitness = Fitness.of(2d, 1d, thresholds);
+
+		double evaluate = fitness.evaluate(result);
+
+		assertThat(evaluate).isEqualTo(200000.0);
 	}
 
 }

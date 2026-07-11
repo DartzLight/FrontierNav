@@ -2,6 +2,9 @@ package cardinal.xenoblade.frontiernav;
 
 import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import cardinal.xenoblade.frontiernav.site.Mira;
+import cardinal.xenoblade.frontiernav.site.PreciousResource;
+
+import java.util.Map;
 
 public class FrontierNavResult {
 	private final Mira mira;
@@ -9,13 +12,15 @@ public class FrontierNavResult {
 	private final int miranium;
 	private final int revenue;
 	private final int storage;
+	private final Map<PreciousResource, Double> preciousResources;
 
-	private FrontierNavResult(Mira mira, ProbeLayout probeLayout, int miranium, int revenue, int storage) {
+	private FrontierNavResult(Mira mira, ProbeLayout probeLayout, int miranium, int revenue, int storage, Map<PreciousResource, Double> preciousResources) {
 		this.mira = mira;
 		this.probeLayout = probeLayout;
 		this.miranium = miranium;
 		this.revenue = revenue;
 		this.storage = storage;
+		this.preciousResources = preciousResources;
 	}
 
 	public Mira getMira() {
@@ -42,6 +47,10 @@ public class FrontierNavResult {
 		return storage;
 	}
 
+	public Map<PreciousResource, Double> getPreciousResources() {
+		return preciousResources;
+	}
+
 	@Override
 	public String toString() {
 		return "Miranium: " + miranium + "/" + storage + " | Revenue: " + revenue;
@@ -52,7 +61,8 @@ public class FrontierNavResult {
 		int miranium = frontierNav.computeMiranium();
 		int revenue = frontierNav.computeRevenue();
 		int storage = frontierNav.computeStorage();
-		return new FrontierNavResult(mira, probeLayout, miranium, revenue, storage);
+		Map<PreciousResource, Double> preciousResources = frontierNav.computePreciousResources();
+		return new FrontierNavResult(mira, probeLayout, miranium, revenue, storage, preciousResources);
 	}
 
 }
