@@ -17,6 +17,7 @@ class GeneticParametersLoaderTest {
 		assertThat(parameters.miraniumCoef()).isEqualTo(0.5d);
 		assertThat(parameters.revenueCoef()).isEqualTo(3d);
 		assertThat(parameters.preciousResourcesThresholds()).isEqualTo(Map.of(PreciousResource.BONJELIUM, 3.7, PreciousResource.INFERNIUM, 1.0, PreciousResource.MARINE_RUTILE, 0.5));
+		assertThat(parameters.preciousResourcesRatios()).isEqualTo(Map.of(PreciousResource.BONJELIUM, 1.0, PreciousResource.EVERFREEZE_ORE, 0.5, PreciousResource.FOUCAULTIUM, 0.01));
 		assertThat(parameters.iterations()).isEqualTo(1_000_000);
 		assertThat(parameters.initialPopulationSize()).isEqualTo(100);
 		assertThat(parameters.selectionByElitismCount()).isEqualTo(1);

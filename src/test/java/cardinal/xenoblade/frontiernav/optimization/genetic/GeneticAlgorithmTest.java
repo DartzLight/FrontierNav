@@ -33,6 +33,7 @@ class GeneticAlgorithmTest {
 		double miraniumCoef = 0.0;
 		double revenueCoef = 0.0;
 		Map<PreciousResource, Double> preciousResourcesThresholds = Map.of();
+		Map<PreciousResource, Double> preciousResourcesRatios = Map.of();
 		Fitness fitness = Fitness.of(miraniumCoef, revenueCoef);
 		int iterations = 150;
 		int initialPopulationSize = 100;
@@ -45,7 +46,7 @@ class GeneticAlgorithmTest {
 		double mutationSwapRate = 0.1;
 		double mutationReplaceRate = 0.1;
 		int randomInjectionCount = 30;
-		GeneticParameters parameters = new GeneticParameters(miraniumCoef, revenueCoef, preciousResourcesThresholds, iterations, initialPopulationSize, selectionByElitismCount, selectedByTournamentCount, tournamentSize, crossoverOnSelectionCount, crossoverOnRandomCount, mutationCount, mutationSwapRate, mutationReplaceRate, randomInjectionCount);
+		GeneticParameters parameters = new GeneticParameters(miraniumCoef, revenueCoef, preciousResourcesThresholds, preciousResourcesRatios, iterations, initialPopulationSize, selectionByElitismCount, selectedByTournamentCount, tournamentSize, crossoverOnSelectionCount, crossoverOnRandomCount, mutationCount, mutationSwapRate, mutationReplaceRate, randomInjectionCount);
 
 		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(mira, inventory, fitness, random, parameters, selection, crossover, mutation, probeLayoutGenerator);
 

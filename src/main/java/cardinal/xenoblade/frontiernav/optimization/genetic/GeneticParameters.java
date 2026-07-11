@@ -8,6 +8,7 @@ public record GeneticParameters(
 		double miraniumCoef,
 		double revenueCoef,
 		Map<PreciousResource, Double> preciousResourcesThresholds,
+		Map<PreciousResource, Double> preciousResourcesRatios,
 		int iterations,
 		int initialPopulationSize,
 		int selectionByElitismCount,

@@ -18,6 +18,7 @@ public class Mira {
 	private final SimpleGraph<Site, DefaultEdge> graph;
 	private final SequencedSet<Site> sites;
 	private final Map<Integer, Site> siteByID;
+	private final Map<PreciousResource, Double> maxPreciousResources;
 
 	private Mira(SimpleGraph<Site, DefaultEdge> graph) {
 		LinkedHashSet<Site> sortedSites = graph.vertexSet()
@@ -28,6 +29,12 @@ public class Mira {
 		this.sites = Collections.unmodifiableSequencedSet(sortedSites);
 		this.siteByID = sites.stream()
 				.collect(Collectors.toUnmodifiableMap(Site::id, Function.identity()));
+		this.maxPreciousResources = getSites()
+				.stream()
+				.flatMap(site -> site.preciousResources().entrySet().stream())
+				.collect(Collectors.groupingBy(
+						Map.Entry::getKey,
+						Collectors.summingDouble(Map.Entry::getValue)));
 	}
 
 	public static Builder builder() {
@@ -59,6 +66,10 @@ public class Mira {
 
 	public Set<Site> getConnectedSites(Site site) {
 		return Graphs.neighborSetOf(graph, site);
+	}
+
+	public Map<PreciousResource, Double> getMaximumPreciousResources() {
+		return maxPreciousResources;
 	}
 
 	public static class Builder {

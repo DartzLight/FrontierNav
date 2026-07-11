@@ -27,6 +27,7 @@ public class GeneticParametersLoader {
 			double miraniumCoef = readProperty(properties, "miraniumCoef").transform(Double::parseDouble);
 			double revenueCoef = readProperty(properties, "revenueCoef").transform(Double::parseDouble);
 			Map<PreciousResource, Double> preciousResourcesThresholds = readPreciousResourcesThresholds(properties, "threshold.");
+			Map<PreciousResource, Double> preciousResourcesRatios = readPreciousResourcesRatios(properties, "ratio.");
 			int iterations = readProperty(properties, "iterations").transform(Integer::parseInt);
 			int initialPopulationSize = readProperty(properties, "initialPopulationSize").transform(Integer::parseInt);
 			int selectionByElitismCount = readProperty(properties, "selectionByElitismCount").transform(Integer::parseInt);
@@ -42,6 +43,7 @@ public class GeneticParametersLoader {
 					miraniumCoef,
 					revenueCoef,
 					preciousResourcesThresholds,
+					preciousResourcesRatios,
 					iterations,
 					initialPopulationSize,
 					selectionByElitismCount,
@@ -68,6 +70,19 @@ public class GeneticParametersLoader {
 								.map(Double::parseDouble)
 								.filter(value -> value > 0.0d)
 								.map(threshold -> Map.entry(resource, threshold))
+								.stream()
+				)
+				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+	}
+
+	private static Map<PreciousResource, Double> readPreciousResourcesRatios(Properties properties, String propertyPrefix) {
+		return Arrays.stream(PreciousResource.values())
+				.flatMap(resource ->
+						Optional.ofNullable(properties.getProperty(propertyPrefix + resource))
+								.map(Double::parseDouble)
+								.filter(value -> value > 0.0d)
+								.filter(value -> value <= 1.0d)
+								.map(ratio -> Map.entry(resource, ratio))
 								.stream()
 				)
 				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));

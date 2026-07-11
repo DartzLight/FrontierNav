@@ -21,7 +21,7 @@ import java.util.Random;
 public class FrontierNavGeneticOptimizer {
 
 	public static FrontierNavResult searchBestFrontierNav(Mira mira, Inventory inventory, Random random, GeneticParameters parameters) {
-		Fitness fitness = Fitness.of(parameters.miraniumCoef(), parameters.revenueCoef(), parameters.preciousResourcesThresholds());
+		Fitness fitness = Fitness.of(parameters.miraniumCoef(), parameters.revenueCoef(), parameters.preciousResourcesThresholds(), parameters.preciousResourcesRatios());
 		GeneticSelection selection = new GeneticSelection(random, fitness);
 		GeneticCrossover crossover = new GeneticCrossover(random);
 		GeneticMutation mutation = new GeneticMutation(random, parameters.mutationSwapRate(), parameters.mutationReplaceRate());
