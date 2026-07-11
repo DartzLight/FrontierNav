@@ -2,10 +2,7 @@ package cardinal.xenoblade.frontiernav;
 
 import cardinal.xenoblade.frontiernav.probe.*;
 import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
-import cardinal.xenoblade.frontiernav.site.Mira;
-import cardinal.xenoblade.frontiernav.site.MiraniumRank;
-import cardinal.xenoblade.frontiernav.site.RevenueRank;
-import cardinal.xenoblade.frontiernav.site.Site;
+import cardinal.xenoblade.frontiernav.site.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -267,6 +264,48 @@ class FrontierNavTest {
 			assertThat(frontierNav.computeMiranium()).isEqualTo(106806);
 			assertThat(frontierNav.computeRevenue()).isEqualTo(530905);
 			assertThat(frontierNav.computeStorage()).isEqualTo(6000);
+		}
+
+		@Test
+		void check_precious_resources() {
+			// Given
+			Site fn503 = new Site(503, MiraniumRank.C, RevenueRank.D, 0, Map.of(PreciousResource.ENDURON_LEAD, 0.19d));
+			Site fn504 = new Site(504, MiraniumRank.C, RevenueRank.C, 0, Map.of(PreciousResource.BONJELIUM, 0.8d, PreciousResource.ENDURON_LEAD, 0.4d, PreciousResource.ARC_SAND_ORE, 0.32d, PreciousResource.MARINE_RUTILE, 0.76d));
+			Site fn507 = new Site(507, MiraniumRank.C, RevenueRank.A, 0, Map.of(PreciousResource.BONJELIUM, 0.2d));
+			Site fn508 = new Site(508, MiraniumRank.A, RevenueRank.B, 0, Map.of(PreciousResource.ENDURON_LEAD, 0.2d, PreciousResource.MARINE_RUTILE, 0.38d));
+			Site fn509 = new Site(509, MiraniumRank.A, RevenueRank.A, 0);
+			Site fn511 = new Site(511, MiraniumRank.A, RevenueRank.C, 0, Map.of(PreciousResource.BONJELIUM, 0.4d));
+			Mira mira = Mira.builder()
+					.addSite(fn503)
+					.addSite(fn504)
+					.addSite(fn507)
+					.addSite(fn508)
+					.addSite(fn509)
+					.addSite(fn511)
+					.addConnection(fn503, fn504)
+					.addConnection(fn508, fn504)
+					.addConnection(fn508, fn507)
+					.addConnection(fn508, fn509)
+					.addConnection(fn508, fn511)
+					.build();
+			ProbeLayout probeLayout = new ProbeLayout(Map.of(
+					fn507, BasicProbe.DEFAULT,
+					fn508, MiningProbe.G10,
+					fn504, DuplicatorProbe.DEFAULT,
+					fn511, BasicProbe.DEFAULT,
+					fn509, MiningProbe.G10,
+					fn503, ResearchProbe.G6
+			));
+			FrontierNav frontierNav = new FrontierNav(mira, probeLayout);
+
+			assertThat(frontierNav.computePreciousResources(fn503)).isEqualTo(Map.of());
+			assertThat(frontierNav.computePreciousResources(fn504)).isEqualTo(Map.of());
+			assertThat(frontierNav.computePreciousResources(fn507)).isEqualTo(Map.of(PreciousResource.BONJELIUM, 0.2d));
+			assertThat(frontierNav.computePreciousResources(fn508)).isEqualTo(Map.of(PreciousResource.ENDURON_LEAD, 0.2d, PreciousResource.MARINE_RUTILE, 0.38d));
+			assertThat(frontierNav.computePreciousResources(fn509)).isEqualTo(Map.of());
+			assertThat(frontierNav.computePreciousResources(fn511)).isEqualTo(Map.of(PreciousResource.BONJELIUM, 0.4d));
+			assertThat(frontierNav.computePreciousResources())
+					.isEqualTo(Map.of(PreciousResource.BONJELIUM, 0.2d + 0.4d, PreciousResource.ENDURON_LEAD, 0.2d, PreciousResource.MARINE_RUTILE, 0.38d));
 		}
 	}
 

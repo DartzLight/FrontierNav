@@ -1,13 +1,11 @@
 package cardinal.xenoblade.frontiernav;
 
+import cardinal.xenoblade.frontiernav.probe.BasicProbe;
 import cardinal.xenoblade.frontiernav.probe.MiningProbe;
 import cardinal.xenoblade.frontiernav.probe.Probe;
 import cardinal.xenoblade.frontiernav.probe.ResearchProbe;
 import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
-import cardinal.xenoblade.frontiernav.site.Mira;
-import cardinal.xenoblade.frontiernav.site.MiraniumRank;
-import cardinal.xenoblade.frontiernav.site.RevenueRank;
-import cardinal.xenoblade.frontiernav.site.Site;
+import cardinal.xenoblade.frontiernav.site.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -23,10 +21,11 @@ class FrontierNavLoaderTest {
 		// Given
 		Path sitesPath = ResourceHelper.getResourcePath("simple/sites.tsv");
 		Path networkPath = ResourceHelper.getResourcePath("simple/network.tsv");
+		Path resourcesPath = ResourceHelper.getResourcePath("simple/resources.tsv");
 		Path probesPath = ResourceHelper.getResourcePath("simple/probes.tsv");
 
 		// When
-		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(sitesPath, networkPath, probesPath);
+		FrontierNav frontierNav = FrontierNavLoader.loadFrontierNav(sitesPath, networkPath, resourcesPath, probesPath);
 
 		// Then
 		Mira mira = buildMira();
@@ -35,16 +34,18 @@ class FrontierNavLoaderTest {
 		assertThat(frontierNav.computeMiranium()).isEqualTo(expected.computeMiranium());
 		assertThat(frontierNav.computeRevenue()).isEqualTo(expected.computeRevenue());
 		assertThat(frontierNav.computeStorage()).isEqualTo(expected.computeStorage());
+		assertThat(frontierNav.computePreciousResources()).isEqualTo(expected.computePreciousResources());
 	}
 
 	private static Mira buildMira() {
 		Site fn112 = new Site(112, MiraniumRank.A, RevenueRank.F);
 		Site fn114 = new Site(114, MiraniumRank.C, RevenueRank.E);
+		Site fn115 = new Site(115, MiraniumRank.C, RevenueRank.D, 0, Map.of(PreciousResource.ARC_SAND_ORE, 0.48d, PreciousResource.LIONBONE_BORT, 0.72d, PreciousResource.WHITE_COMETITE, 0.84d));
 		Site fn116 = new Site(116, MiraniumRank.A, RevenueRank.D);
 		Site fn117 = new Site(117, MiraniumRank.A, RevenueRank.D, 1);
 		return Mira.builder()
-				.addSite(fn112).addSite(fn114).addSite(fn116).addSite(fn117)
-				.addConnection(fn112, fn114).addConnection(fn114, fn116).addConnection(fn116, fn117)
+				.addSite(fn112).addSite(fn114).addSite(fn115).addSite(fn116).addSite(fn117)
+				.addConnection(fn115, fn112).addConnection(fn112, fn114).addConnection(fn114, fn116).addConnection(fn116, fn117)
 				.build();
 	}
 
@@ -52,6 +53,7 @@ class FrontierNavLoaderTest {
 		return Map.of(
 				mira.getSite(112), MiningProbe.G1,
 				mira.getSite(114), MiningProbe.G1,
+				mira.getSite(115), BasicProbe.DEFAULT,
 				mira.getSite(116), MiningProbe.G1,
 				mira.getSite(117), ResearchProbe.G1
 		);
