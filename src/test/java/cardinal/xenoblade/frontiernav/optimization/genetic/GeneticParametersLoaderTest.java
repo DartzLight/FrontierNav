@@ -1,9 +1,11 @@
 package cardinal.xenoblade.frontiernav.optimization.genetic;
 
 import cardinal.xenoblade.frontiernav.ResourceHelper;
+import cardinal.xenoblade.frontiernav.site.PreciousResource;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,6 +16,7 @@ class GeneticParametersLoaderTest {
 		GeneticParameters parameters = GeneticParametersLoader.load(ResourceHelper.getResourcePath("genetic/genetic.properties"));
 		assertThat(parameters.miraniumCoef()).isEqualTo(0.5d);
 		assertThat(parameters.revenueCoef()).isEqualTo(3d);
+		assertThat(parameters.preciousResourcesThresholds()).isEqualTo(Map.of(PreciousResource.BONJELIUM, 3.7, PreciousResource.INFERNIUM, 1.0, PreciousResource.MARINE_RUTILE, 0.5));
 		assertThat(parameters.iterations()).isEqualTo(1_000_000);
 		assertThat(parameters.initialPopulationSize()).isEqualTo(100);
 		assertThat(parameters.selectionByElitismCount()).isEqualTo(1);

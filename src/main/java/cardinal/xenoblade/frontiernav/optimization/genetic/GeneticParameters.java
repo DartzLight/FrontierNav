@@ -1,8 +1,13 @@
 package cardinal.xenoblade.frontiernav.optimization.genetic;
 
+import cardinal.xenoblade.frontiernav.site.PreciousResource;
+
+import java.util.Map;
+
 public record GeneticParameters(
 		double miraniumCoef,
 		double revenueCoef,
+		Map<PreciousResource, Double> preciousResourcesThresholds,
 		int iterations,
 		int initialPopulationSize,
 		int selectionByElitismCount,

@@ -1,11 +1,17 @@
 package cardinal.xenoblade.frontiernav.optimization.genetic;
 
+import cardinal.xenoblade.frontiernav.site.PreciousResource;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,6 +26,7 @@ public class GeneticParametersLoader {
 			properties.load(is);
 			double miraniumCoef = readProperty(properties, "miraniumCoef").transform(Double::parseDouble);
 			double revenueCoef = readProperty(properties, "revenueCoef").transform(Double::parseDouble);
+			Map<PreciousResource, Double> preciousResourcesThresholds = readPreciousResourcesThresholds(properties, "threshold.");
 			int iterations = readProperty(properties, "iterations").transform(Integer::parseInt);
 			int initialPopulationSize = readProperty(properties, "initialPopulationSize").transform(Integer::parseInt);
 			int selectionByElitismCount = readProperty(properties, "selectionByElitismCount").transform(Integer::parseInt);
@@ -34,6 +41,7 @@ public class GeneticParametersLoader {
 			return new GeneticParameters(
 					miraniumCoef,
 					revenueCoef,
+					preciousResourcesThresholds,
 					iterations,
 					initialPopulationSize,
 					selectionByElitismCount,
@@ -51,6 +59,18 @@ public class GeneticParametersLoader {
 
 	private static String readProperty(Properties properties, String propertyName) {
 		return requireNonNull(properties.getProperty(propertyName), "missing property: " + propertyName);
+	}
+
+	private static Map<PreciousResource, Double> readPreciousResourcesThresholds(Properties properties, String propertyPrefix) {
+		return Arrays.stream(PreciousResource.values())
+				.flatMap(resource ->
+						Optional.ofNullable(properties.getProperty(propertyPrefix + resource))
+								.map(Double::parseDouble)
+								.filter(value -> value > 0.0d)
+								.map(threshold -> Map.entry(resource, threshold))
+								.stream()
+				)
+				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
 }
