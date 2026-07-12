@@ -26,24 +26,28 @@ public interface Fitness {
 					.stream()
 					.map(entry -> {
 						PreciousResource resource = entry.getKey();
-						double threshold = entry.getValue();
-						double actual = preciousResources.getOrDefault(resource, 0d);
-						return Double.min(actual / threshold, 1.0d);
+						double totalAvailable = mira.getMaximumPreciousResources().get(resource);
+						double threshold = Double.min(entry.getValue(), totalAvailable);
+						return computeMalusMultiplier(preciousResources, resource, threshold);
 					}).toList();
 			List<Double> ratioMultipliers = ratios.entrySet()
 					.stream()
 					.map(entry -> {
 						PreciousResource resource = entry.getKey();
-						double ratio = entry.getValue();
+						double ratio = Double.min(entry.getValue(), 1.0d);
 						double totalAvailable = mira.getMaximumPreciousResources().get(resource);
 						double threshold = ratio * totalAvailable;
-						double actual = preciousResources.getOrDefault(resource, 0d);
-						return Double.min(actual / threshold, 1.0d);
+						return computeMalusMultiplier(preciousResources, resource, threshold);
 					}).toList();
 			return Stream.concat(thresholdMultipliers.stream(), ratioMultipliers.stream())
 					.mapToDouble(x -> x)
 					.reduce(base, (x, y) -> x * y);
 		};
+	}
+
+	private static double computeMalusMultiplier(Map<PreciousResource, Double> preciousResources, PreciousResource resource, double threshold) {
+		double actual = preciousResources.getOrDefault(resource, 0d);
+		return Double.min(actual / threshold, 1.0d);
 	}
 
 	static double compute(IntSupplier miraniumSupplier, double miraniumCoef, IntSupplier revenueSupplier, double revenueCoef) {

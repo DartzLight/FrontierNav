@@ -43,7 +43,18 @@ class FitnessTest {
 
 	@Test
 	void should_validate_fitness_with_resources_thresholds() {
+		Mira mira = Mockito.mock(Mira.class);
 		FrontierNavResult result = Mockito.mock(FrontierNavResult.class);
+		Mockito.when(result.getMira()).thenReturn(mira);
+		Map<PreciousResource, Double> maximumPreciousResources = Map.of(
+				PreciousResource.DAWNSTONE, 10d,
+				PreciousResource.CIMMERIAN_CINNABAR, 2d,
+				PreciousResource.OUROBOROS_CRYSTAL, 3d,
+				PreciousResource.PARHELION_PLATINUM, 6d,
+				PreciousResource.BONJELIUM, 5d,
+				PreciousResource.AURORITE, 10d
+		);
+		Mockito.when(mira.getMaximumPreciousResources()).thenReturn(maximumPreciousResources);
 		Mockito.when(result.getEffectiveMiranium()).thenReturn(100_000);
 		Mockito.when(result.getRevenue()).thenReturn(300_000);
 		Map<PreciousResource, Double> preciousResources = Map.of(
@@ -58,7 +69,7 @@ class FitnessTest {
 		Map<PreciousResource, Double> thresholds = Map.of(
 				PreciousResource.DAWNSTONE, 1d,
 				PreciousResource.CIMMERIAN_CINNABAR, 2d,
-				PreciousResource.OUROBOROS_CRYSTAL, 3d,
+				PreciousResource.OUROBOROS_CRYSTAL, 4d,
 				PreciousResource.PARHELION_PLATINUM, 4d,
 				PreciousResource.BONJELIUM, 5d
 		);
@@ -79,7 +90,8 @@ class FitnessTest {
 				PreciousResource.OUROBOROS_CRYSTAL, 5d,
 				PreciousResource.PARHELION_PLATINUM, 20d,
 				PreciousResource.BONJELIUM, 4d,
-				PreciousResource.AURORITE, 10d
+				PreciousResource.AURORITE, 10d,
+				PreciousResource.ENDURON_LEAD, 15d
 		);
 		Mockito.when(mira.getMaximumPreciousResources()).thenReturn(maximumPreciousResources);
 		Mockito.when(result.getEffectiveMiranium()).thenReturn(100_000);
@@ -90,14 +102,16 @@ class FitnessTest {
 				PreciousResource.OUROBOROS_CRYSTAL, 3d,
 				PreciousResource.PARHELION_PLATINUM, 5d,
 				PreciousResource.BONJELIUM, 4d,
-				PreciousResource.AURORITE, 10d
+				PreciousResource.AURORITE, 10d,
+				PreciousResource.ENDURON_LEAD, 15d
 		);
 		Mockito.when(result.getPreciousResources()).thenReturn(preciousResources);
 		Map<PreciousResource, Double> ratios = Map.of(
 				PreciousResource.CIMMERIAN_CINNABAR, 0.5d,
 				PreciousResource.OUROBOROS_CRYSTAL, 0.5d,
 				PreciousResource.PARHELION_PLATINUM, 0.5d,
-				PreciousResource.BONJELIUM, 1d
+				PreciousResource.BONJELIUM, 1d,
+				PreciousResource.ENDURON_LEAD, 2d
 		);
 		Fitness fitness = Fitness.of(2d, 1d, Map.of(), ratios);
 
