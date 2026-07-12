@@ -1,14 +1,12 @@
 package cardinal.xenoblade.frontiernav.optimization;
 
 import cardinal.xenoblade.frontiernav.FrontierNavResult;
-import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.PreciousResource;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.function.IntSupplier;
-import java.util.stream.Stream;
+import java.util.stream.DoubleStream;
 
 @FunctionalInterface
 public interface Fitness {
@@ -18,40 +16,53 @@ public interface Fitness {
 	}
 
 	static Fitness of(double miraniumCoef, double revenueCoef, Map<PreciousResource, Double> thresholds, Map<PreciousResource, Double> ratios) {
-		return value -> {
-			Mira mira = value.getMira();
-			Map<PreciousResource, Double> preciousResources = value.getPreciousResources();
-			double base = Fitness.compute(value::getEffectiveMiranium, miraniumCoef, value::getRevenue, revenueCoef);
-			List<Double> thresholdMultipliers = thresholds.entrySet()
-					.stream()
-					.map(entry -> {
-						PreciousResource resource = entry.getKey();
-						double totalAvailable = mira.getMaximumPreciousResources().get(resource);
-						double threshold = Double.min(entry.getValue(), totalAvailable);
-						return computeMalusMultiplier(preciousResources, resource, threshold);
-					}).toList();
-			List<Double> ratioMultipliers = ratios.entrySet()
-					.stream()
-					.map(entry -> {
-						PreciousResource resource = entry.getKey();
-						double ratio = Double.min(entry.getValue(), 1.0d);
-						double totalAvailable = mira.getMaximumPreciousResources().get(resource);
-						double threshold = ratio * totalAvailable;
-						return computeMalusMultiplier(preciousResources, resource, threshold);
-					}).toList();
-			return Stream.concat(thresholdMultipliers.stream(), ratioMultipliers.stream())
-					.mapToDouble(x -> x)
-					.reduce(base, (x, y) -> x * y);
+		return result -> {
+			double base = Fitness.compute(result::getEffectiveMiranium, miraniumCoef, result::getRevenue, revenueCoef);
+			DoubleStream malusMultipliers = getMalusMultipliers(result.getPreciousResources(), thresholds, ratios, result.getMira().getMaximumPreciousResources());
+			return applyMalusMultipliers(base, malusMultipliers);
 		};
-	}
-
-	private static double computeMalusMultiplier(Map<PreciousResource, Double> preciousResources, PreciousResource resource, double threshold) {
-		double actual = preciousResources.getOrDefault(resource, 0d);
-		return Double.min(actual / threshold, 1.0d);
 	}
 
 	static double compute(IntSupplier miraniumSupplier, double miraniumCoef, IntSupplier revenueSupplier, double revenueCoef) {
 		return miraniumCoef * miraniumSupplier.getAsInt() + revenueCoef * revenueSupplier.getAsInt();
+	}
+
+	static DoubleStream getMalusMultipliers(Map<PreciousResource, Double> actual, Map<PreciousResource, Double> thresholds, Map<PreciousResource, Double> ratios, Map<PreciousResource, Double> maximum) {
+		DoubleStream thresholdMultipliers = getThresholdMalusMultipliers(actual, thresholds, maximum);
+		DoubleStream ratioMultipliers = getRatioMalusMultipliers(actual, ratios, maximum);
+		return DoubleStream.concat(thresholdMultipliers, ratioMultipliers);
+	}
+
+	static DoubleStream getThresholdMalusMultipliers(Map<PreciousResource, Double> actual, Map<PreciousResource, Double> thresholds, Map<PreciousResource, Double> maximum) {
+		return thresholds.entrySet()
+				.stream()
+				.mapToDouble(entry -> {
+					PreciousResource resource = entry.getKey();
+					double totalAvailable = maximum.get(resource);
+					double threshold = Double.min(entry.getValue(), totalAvailable);
+					return computeMalusMultiplier(actual, resource, threshold);
+				});
+	}
+
+	static DoubleStream getRatioMalusMultipliers(Map<PreciousResource, Double> actual, Map<PreciousResource, Double> ratios, Map<PreciousResource, Double> maximum) {
+		return ratios.entrySet()
+				.stream()
+				.mapToDouble(entry -> {
+					PreciousResource resource = entry.getKey();
+					double ratio = Double.min(entry.getValue(), 1d);
+					double totalAvailable = maximum.getOrDefault(resource, 0d);
+					double threshold = ratio * totalAvailable;
+					return computeMalusMultiplier(actual, resource, threshold);
+				});
+	}
+
+	private static double computeMalusMultiplier(Map<PreciousResource, Double> preciousResources, PreciousResource resource, double threshold) {
+		double actual = preciousResources.getOrDefault(resource, 0d);
+		return Double.min(actual / threshold, 1d);
+	}
+
+	private static double applyMalusMultipliers(double base, DoubleStream malusMultipliers) {
+		return malusMultipliers.reduce(base, (x, y) -> x * y);
 	}
 
 	double evaluate(FrontierNavResult value);

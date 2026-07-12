@@ -1,12 +1,8 @@
 package cardinal.xenoblade.frontiernav.optimization;
 
-import cardinal.xenoblade.frontiernav.FrontierNavResult;
-import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.PreciousResource;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mockito;
 
 import java.util.Map;
 import java.util.function.IntSupplier;
@@ -28,96 +24,41 @@ class FitnessTest {
 		assertThat(result).isEqualTo(expected);
 	}
 
-	@Test
-	void should_validate_fitness() {
-		FrontierNavResult result = Mockito.mock(FrontierNavResult.class);
-		Mockito.when(result.getEffectiveMiranium()).thenReturn(100_000);
-		Mockito.when(result.getRevenue()).thenReturn(300_000);
-		Mockito.when(result.getPreciousResources()).thenReturn(Map.of());
-		Fitness fitness = Fitness.of(2d, 1d);
-
-		double evaluate = fitness.evaluate(result);
-
-		assertThat(evaluate).isEqualTo(500000.0);
+	@ParameterizedTest
+	@CsvSource({
+			"10, 10, 10, 1", // current = threshold = max
+			"10, 10, 15, 1", // curent = threshold < max
+			"12, 10, 15, 1", // curent > threshold & current < max
+			"7, 10, 10, 0.7", // current < threshold = max
+			"7, 10, 15, 0.7", // current < threshold < max
+			"0, 5, 10, 0", // current = 0
+			"10, 15, 10, 1", // threshold too high
+			"5, 0, 10, 1" // no threshold at all
+	})
+	void should_compute_malus_with_threshold(double current, double threshold, double max, double result) {
+		assertThat(Fitness.getThresholdMalusMultipliers(
+				Map.of(PreciousResource.BONJELIUM, current),
+				Map.of(PreciousResource.BONJELIUM, threshold),
+				Map.of(PreciousResource.BONJELIUM, max)
+		)).containsExactly(result);
 	}
 
-	@Test
-	void should_validate_fitness_with_resources_thresholds() {
-		Mira mira = Mockito.mock(Mira.class);
-		FrontierNavResult result = Mockito.mock(FrontierNavResult.class);
-		Mockito.when(result.getMira()).thenReturn(mira);
-		Map<PreciousResource, Double> maximumPreciousResources = Map.of(
-				PreciousResource.DAWNSTONE, 10d,
-				PreciousResource.CIMMERIAN_CINNABAR, 2d,
-				PreciousResource.OUROBOROS_CRYSTAL, 3d,
-				PreciousResource.PARHELION_PLATINUM, 6d,
-				PreciousResource.BONJELIUM, 5d,
-				PreciousResource.AURORITE, 10d
-		);
-		Mockito.when(mira.getMaximumPreciousResources()).thenReturn(maximumPreciousResources);
-		Mockito.when(result.getEffectiveMiranium()).thenReturn(100_000);
-		Mockito.when(result.getRevenue()).thenReturn(300_000);
-		Map<PreciousResource, Double> preciousResources = Map.of(
-				PreciousResource.DAWNSTONE, 1d,
-				PreciousResource.CIMMERIAN_CINNABAR, 1d,
-				PreciousResource.OUROBOROS_CRYSTAL, 3d,
-				PreciousResource.PARHELION_PLATINUM, 5d,
-				PreciousResource.BONJELIUM, 4d,
-				PreciousResource.AURORITE, 10d
-		);
-		Mockito.when(result.getPreciousResources()).thenReturn(preciousResources);
-		Map<PreciousResource, Double> thresholds = Map.of(
-				PreciousResource.DAWNSTONE, 1d,
-				PreciousResource.CIMMERIAN_CINNABAR, 2d,
-				PreciousResource.OUROBOROS_CRYSTAL, 4d,
-				PreciousResource.PARHELION_PLATINUM, 4d,
-				PreciousResource.BONJELIUM, 5d
-		);
-		Fitness fitness = Fitness.of(2d, 1d, thresholds, Map.of());
-
-		double evaluate = fitness.evaluate(result);
-
-		assertThat(evaluate).isEqualTo(200000.0);
-	}
-
-	@Test
-	void should_validate_fitness_with_resources_ratios() {
-		Mira mira = Mockito.mock(Mira.class);
-		FrontierNavResult result = Mockito.mock(FrontierNavResult.class);
-		Mockito.when(result.getMira()).thenReturn(mira);
-		Map<PreciousResource, Double> maximumPreciousResources = Map.of(
-				PreciousResource.CIMMERIAN_CINNABAR, 2d,
-				PreciousResource.OUROBOROS_CRYSTAL, 5d,
-				PreciousResource.PARHELION_PLATINUM, 20d,
-				PreciousResource.BONJELIUM, 4d,
-				PreciousResource.AURORITE, 10d,
-				PreciousResource.ENDURON_LEAD, 15d
-		);
-		Mockito.when(mira.getMaximumPreciousResources()).thenReturn(maximumPreciousResources);
-		Mockito.when(result.getEffectiveMiranium()).thenReturn(100_000);
-		Mockito.when(result.getRevenue()).thenReturn(300_000);
-		Map<PreciousResource, Double> preciousResources = Map.of(
-				PreciousResource.DAWNSTONE, 1d,
-				PreciousResource.CIMMERIAN_CINNABAR, 1d,
-				PreciousResource.OUROBOROS_CRYSTAL, 3d,
-				PreciousResource.PARHELION_PLATINUM, 5d,
-				PreciousResource.BONJELIUM, 4d,
-				PreciousResource.AURORITE, 10d,
-				PreciousResource.ENDURON_LEAD, 15d
-		);
-		Mockito.when(result.getPreciousResources()).thenReturn(preciousResources);
-		Map<PreciousResource, Double> ratios = Map.of(
-				PreciousResource.CIMMERIAN_CINNABAR, 0.5d,
-				PreciousResource.OUROBOROS_CRYSTAL, 0.5d,
-				PreciousResource.PARHELION_PLATINUM, 0.5d,
-				PreciousResource.BONJELIUM, 1d,
-				PreciousResource.ENDURON_LEAD, 2d
-		);
-		Fitness fitness = Fitness.of(2d, 1d, Map.of(), ratios);
-
-		double evaluate = fitness.evaluate(result);
-
-		assertThat(evaluate).isEqualTo(250000.0);
+	@ParameterizedTest
+	@CsvSource({
+			"10, 1.0, 10, 1", // current = ratio = max
+			"5, 0.5, 10, 1", // curent = ratio < max
+			"8, 0.5, 10, 1", // curent > ratio & current < max
+			"2, 0.4, 10, 0.5", // current < ratio
+			"0, 0.5, 10, 0", // current = 0
+			"10, 2.0, 10, 1", // ratio too high
+			"5, 0.0, 10, 1" // no ratio at all
+	})
+	void should_compute_malus_with_ratio(double current, double ratio, double max, double result) {
+		assertThat(Fitness.getRatioMalusMultipliers(
+				Map.of(PreciousResource.BONJELIUM, current),
+				Map.of(PreciousResource.BONJELIUM, ratio),
+				Map.of(PreciousResource.BONJELIUM, max)
+		)).containsExactly(result);
 	}
 
 }
