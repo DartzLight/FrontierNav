@@ -1,7 +1,7 @@
 # FrontierNav Optimizer
 
 A tool to find a near-optimal probe layout for FrontierNav in *Xenoblade Chronicles X* using a genetic algorithm.
-It optimizes layouts to maximize metrics such as Miranium production and/or revenue.
+It optimizes layouts to maximize metrics such as Miranium production, revenue and/or precious resources.
 
 ## Usage
 
@@ -34,6 +34,55 @@ You can copy the `.tsv` files from `input/default/` to `input/` directory, and t
 - you can leave the `network.tsv` file as-is (the sites not in `sites.tsv` will be ignored)
 - you can also modify the `genetic.properties` file to fine-tune the algorithm
     - especially the `miraniumCoef` and `revenueCoef` parameters, representing the ratio of miranium/revenue you want to maximize
+    - you can also configure precious resource targets (see [Precious resources](#precious-resources))
+
+### Precious resources
+
+In addition to Miranium and revenue, the algorithm can be tuned to favor layouts that produce enough of specific **precious resources**.
+
+Two types of targets are supported and can be combined:
+
+#### Absolute threshold
+
+Sets a minimum amount of a precious resource that the layout should produce on average.
+
+```properties 
+threshold.BONJELIUM=1
+``` 
+
+A layout producing less than the threshold gets a proportional score penalty.
+
+#### Ratio threshold
+
+Sets a target as a *ratio* (between `0` and `1`) of the maximum possible production of that resource across all sites.
+
+```properties
+ratio.BONJELIUM=0.5
+```
+
+A value of 0.5 means the layout should reach at least 50% of the maximum achievable production for that resource.
+
+_Both `threshold.*` and `ratio.*` entries can be defined for the same resource. In that case: both penalties will apply independently._
+
+#### Available precious resources
+
+The following precious resource names can be used as keys:
+
+- `ARC_SAND_ORE`
+- `AURORITE`
+- `BOILED_EGG_ORE`
+- `BONJELIUM`
+- `CIMMERIAN_CINNABAR`
+- `DAWNSTONE`
+- `ENDURON_LEAD`
+- `EVERFREEZE_ORE`
+- `FOUCAULTIUM`
+- `INFERNIUM`
+- `LIONBONE_BORT`
+- `MARINE_RUTILE`
+- `OUROBOROS_CRYSTAL`
+- `PARHELION_PLATINUM`
+- `WHITE_COMETITE`
 
 ### Running the Optimizer
 
