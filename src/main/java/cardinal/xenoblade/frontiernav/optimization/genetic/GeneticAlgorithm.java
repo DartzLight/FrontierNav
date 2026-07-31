@@ -48,13 +48,11 @@ public class GeneticAlgorithm {
 	}
 
 	private List<FrontierNavResult> initialize() {
-		List<FrontierNavResult> population = new ArrayList<>();
+		List<ProbeLayout> probeLayouts = new ArrayList<>();
 		for (int i = 0; i < parameters.initialPopulationSize(); i++) {
-			ProbeLayout probeLayout = probeLayoutGenerator.generateRandom();
-			FrontierNavResult result = FrontierNavResult.compute(mira, probeLayout);
-			population.add(result);
+			probeLayouts.add(probeLayoutGenerator.generateRandom());
 		}
-		return population;
+		return evaluate(probeLayouts);
 	}
 
 	private List<FrontierNavResult> evolve(List<FrontierNavResult> previousPopulation) {
@@ -63,38 +61,41 @@ public class GeneticAlgorithm {
 		List<FrontierNavResult> tournament = selection.tournament(previousPopulation, parameters.selectionByTournamentCount(), parameters.tournamentSize());
 		selected.addAll(elite);
 		selected.addAll(tournament);
-		List<FrontierNavResult> nextPopulation = new ArrayList<>(selected);
+		List<ProbeLayout> newProbeLayouts = new ArrayList<>();
 
 		for (int i = 0; i < parameters.crossoverOnSelectionCount(); i++) {
 			ProbeLayout parent1 = selectRandom(selected);
 			ProbeLayout parent2 = selectRandom(selected);
 			ProbeLayout offspring = crossover.crossover(mira, parent1, parent2, inventory);
-			FrontierNavResult result = FrontierNavResult.compute(mira, offspring);
-			nextPopulation.add(result);
+			newProbeLayouts.add(offspring);
 		}
 
 		for (int i = 0; i < parameters.crossoverOnRandomCount(); i++) {
 			ProbeLayout parent1 = selectRandom(selected);
 			ProbeLayout parent2 = probeLayoutGenerator.generateRandom();
 			ProbeLayout offspring = crossover.crossover(mira, parent1, parent2, inventory);
-			FrontierNavResult result = FrontierNavResult.compute(mira, offspring);
-			nextPopulation.add(result);
+			newProbeLayouts.add(offspring);
 		}
 
 		for (int i = 0; i < parameters.mutationCount(); i++) {
 			ProbeLayout origin = selectRandom(selected);
 			ProbeLayout altered = mutation.mutation(mira, origin, inventory);
-			FrontierNavResult result = FrontierNavResult.compute(mira, altered);
-			nextPopulation.add(result);
+			newProbeLayouts.add(altered);
 		}
 
 		for (int i = 0; i < parameters.randomInjectionCount(); i++) {
-			ProbeLayout randomProbeLayout = probeLayoutGenerator.generateRandom();
-			FrontierNavResult result = FrontierNavResult.compute(mira, randomProbeLayout);
-			nextPopulation.add(result);
+			newProbeLayouts.add(probeLayoutGenerator.generateRandom());
 		}
 
+		List<FrontierNavResult> nextPopulation = new ArrayList<>(selected);
+		nextPopulation.addAll(evaluate(newProbeLayouts));
 		return nextPopulation;
+	}
+
+	private List<FrontierNavResult> evaluate(List<ProbeLayout> probeLayouts) {
+		return probeLayouts.parallelStream()
+				.map(probeLayout -> FrontierNavResult.compute(mira, probeLayout))
+				.toList();
 	}
 
 	private ProbeLayout selectRandom(List<FrontierNavResult> population) {
