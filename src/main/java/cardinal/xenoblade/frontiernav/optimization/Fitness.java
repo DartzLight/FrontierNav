@@ -5,6 +5,7 @@ import cardinal.xenoblade.frontiernav.site.PreciousResource;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.function.IntSupplier;
 import java.util.stream.DoubleStream;
 
@@ -21,6 +22,11 @@ public interface Fitness {
 			DoubleStream malusMultipliers = getMalusMultipliers(result.getPreciousResources(), thresholds, ratios, result.getMira().getMaximumPreciousResources());
 			return applyMalusMultipliers(base, malusMultipliers);
 		};
+	}
+
+	static Fitness cached(Fitness delegate) {
+		Map<FrontierNavResult, Double> cache = new WeakHashMap<>();
+		return result -> cache.computeIfAbsent(result, delegate::evaluate);
 	}
 
 	static double compute(IntSupplier miraniumSupplier, double miraniumCoef, IntSupplier revenueSupplier, double revenueCoef) {
