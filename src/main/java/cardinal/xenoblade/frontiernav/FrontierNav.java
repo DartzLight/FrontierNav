@@ -6,6 +6,7 @@ import cardinal.xenoblade.frontiernav.site.Mira;
 import cardinal.xenoblade.frontiernav.site.PreciousResource;
 import cardinal.xenoblade.frontiernav.site.Site;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +22,9 @@ public class FrontierNav {
 
 	private final Mira mira;
 	private final ProbeLayout probeLayout;
+	private final Map<Site, Integer> chainsMultipliersCache = new HashMap<>();
+	private final Map<Site, Integer> incomingBoostMultipliersCache = new HashMap<>();
+	private final Map<Site, Integer> outgoingBoostMultipliersCache = new HashMap<>();
 
 	public FrontierNav(Mira mira, ProbeLayout probeLayout) {
 		this.mira = mira;
@@ -142,9 +146,13 @@ public class FrontierNav {
 
 	private int computeChainMultiplier(Site site, Probe probe, Class<? extends Probe> multipliableProbeType) {
 		if (canHaveMultiplier(probe, multipliableProbeType)) {
-			return computeChainMultiplier(site);
+			return getChainMultiplier(site);
 		}
 		return 100;
+	}
+
+	private int getChainMultiplier(Site site) {
+		return chainsMultipliersCache.computeIfAbsent(site, this::computeChainMultiplier);
 	}
 
 	public int computeChainMultiplier(Site site) {
@@ -167,16 +175,24 @@ public class FrontierNav {
 
 	private int computeBoostMultiplier(Site site, Probe probe, Class<? extends Probe> multipliableProbeType) {
 		if (canHaveMultiplier(probe, multipliableProbeType)) {
-			return computeIncomingBoostMultiplier(site);
+			return getIncomingBoostMultiplier(site);
 		}
 		return 100;
+	}
+
+	public int getIncomingBoostMultiplier(Site site) {
+		return incomingBoostMultipliersCache.computeIfAbsent(site, this::computeIncomingBoostMultiplier);
 	}
 
 	public int computeIncomingBoostMultiplier(Site site) {
 		Set<Site> connectedSites = mira.getConnectedSites(site);
 		return connectedSites.stream()
-				.mapToInt(this::computeOutgoingBoostMultiplier)
+				.mapToInt(this::getOutgoingBoostMultiplier)
 				.reduce(100, FrontierNav::applyMultiplier);
+	}
+
+	public int getOutgoingBoostMultiplier(Site site) {
+		return outgoingBoostMultipliersCache.computeIfAbsent(site, this::computeOutgoingBoostMultiplier);
 	}
 
 	public int computeOutgoingBoostMultiplier(Site site) {
@@ -185,7 +201,7 @@ public class FrontierNav {
 				.mapToInt(Probe::getBoostMultiplier)
 				.reduce(100, FrontierNav::applyMultiplier);
 		if (boostMultiplier > 100) {
-			int chainMultiplier = computeChainMultiplier(site);
+			int chainMultiplier = getChainMultiplier(site);
 			return applyMultiplier(chainMultiplier, boostMultiplier);
 		}
 		return boostMultiplier;
