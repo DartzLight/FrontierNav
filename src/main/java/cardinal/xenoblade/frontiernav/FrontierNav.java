@@ -26,6 +26,7 @@ public class FrontierNav {
 	private final Map<Site, Integer> chainsMultipliersCache = new HashMap<>();
 	private final Map<Site, Integer> incomingBoostMultipliersCache = new HashMap<>();
 	private final Map<Site, Integer> outgoingBoostMultipliersCache = new HashMap<>();
+	private final Map<Site, List<Probe>> effectiveProbesCache = new HashMap<>();
 
 	public FrontierNav(Mira mira, ProbeLayout probeLayout) {
 		this.mira = mira;
@@ -46,6 +47,10 @@ public class FrontierNav {
 	}
 
 	private List<Probe> getEffectiveProbes(Site site) {
+		return effectiveProbesCache.computeIfAbsent(site, this::computeEffectiveProbes);
+	}
+
+	private List<Probe> computeEffectiveProbes(Site site) {
 		Probe probe = getRealProbe(site);
 		if (probe instanceof DuplicatorProbe) {
 			return mira.getConnectedSites(site)
