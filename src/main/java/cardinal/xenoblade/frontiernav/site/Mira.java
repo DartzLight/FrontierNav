@@ -1,8 +1,5 @@
 package cardinal.xenoblade.frontiernav.site;
 
-import cardinal.xenoblade.frontiernav.probe.BasicProbe;
-import cardinal.xenoblade.frontiernav.probe.Probe;
-import cardinal.xenoblade.frontiernav.probe.layout.ProbeLayout;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
@@ -12,6 +9,7 @@ import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Mira {
@@ -49,19 +47,30 @@ public class Mira {
 		return siteByID.get(siteID);
 	}
 
-	public int computeChain(Site site, ProbeLayout probeLayout) {
-		Probe probe = probeLayout.getProbe(site);
-		if (probe == BasicProbe.DEFAULT) {
-			return 1;
+	public <T> Map<Site, Integer> computeChains(Function<Site, T> siteClassifier, Predicate<Site> condition) {
+		Map<Site, Integer> chains = new HashMap<>();
+		Map<T, List<Site>> sitesGroups = sites.stream()
+				.filter(condition)
+				.collect(Collectors.groupingBy(siteClassifier));
+
+		for (Site site : sites) {
+			if (!condition.test(site)) {
+				chains.put(site, 1);
+			}
 		}
 
-		Set<Site> sameProbe = sites.stream()
-				.filter(s -> probe.equals(probeLayout.getProbe(s)))
-				.collect(Collectors.toSet());
-		Graph<Site, DefaultEdge> subgraph = new AsSubgraph<>(graph, sameProbe);
+		for (List<Site> sameGroupSites : sitesGroups.values()) {
+			Graph<Site, DefaultEdge> subgraph = new AsSubgraph<>(graph, new HashSet<>(sameGroupSites));
+			ConnectivityInspector<Site, DefaultEdge> connectivity = new ConnectivityInspector<>(subgraph);
+			for (Set<Site> connectedSet : connectivity.connectedSets()) {
+				int chainSize = connectedSet.size();
+				for (Site connectedSite : connectedSet) {
+					chains.put(connectedSite, chainSize);
+				}
+			}
+		}
 
-		ConnectivityInspector<Site, DefaultEdge> connectivity = new ConnectivityInspector<>(subgraph);
-		return connectivity.connectedSetOf(site).size();
+		return chains;
 	}
 
 	public Set<Site> getConnectedSites(Site site) {

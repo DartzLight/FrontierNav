@@ -22,6 +22,7 @@ public class FrontierNav {
 
 	private final Mira mira;
 	private final ProbeLayout probeLayout;
+	private final Map<Site, Integer> chainSizeBySite;
 	private final Map<Site, Integer> chainsMultipliersCache = new HashMap<>();
 	private final Map<Site, Integer> incomingBoostMultipliersCache = new HashMap<>();
 	private final Map<Site, Integer> outgoingBoostMultipliersCache = new HashMap<>();
@@ -29,6 +30,7 @@ public class FrontierNav {
 	public FrontierNav(Mira mira, ProbeLayout probeLayout) {
 		this.mira = mira;
 		this.probeLayout = probeLayout;
+		chainSizeBySite = mira.computeChains(probeLayout::getProbe, site -> probeLayout.getProbe(site) != BasicProbe.DEFAULT);
 	}
 
 	public Mira getMira() {
@@ -156,8 +158,7 @@ public class FrontierNav {
 	}
 
 	public int computeChainMultiplier(Site site) {
-		int chain = mira.computeChain(site, probeLayout);
-		return getChainMultiplier(chain);
+		return getChainMultiplier(chainSizeBySite.get(site));
 	}
 
 	private static int getChainMultiplier(int chain) {
